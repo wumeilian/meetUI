@@ -1,0 +1,23 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "browsers": [
+            "> 1%",
+            "iOS >= 8.0",
+            "Android >= 4.4",
+            "Chrome >= 30",
+            "Safari >= 9",
+            "Firefox ESR",
+            "Opera 12.1"
+          ]
+        },
+        "modules": false
+      }
+    ],
+    "stage-3"
+  ],
+  "plugins": ["external-helpers"]
+}

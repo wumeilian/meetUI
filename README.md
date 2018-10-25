@@ -1,1 +1,2 @@
-## A pure javascript mobile UI framework！
+# MeetUI
+A pure JavaScript UI framework for mobile !

@@ -1,12 +1,12 @@
-import json from 'rollup-plugin-json';
-import resolve from 'rollup-plugin-node-resolve';
-import babel from 'rollup-plugin-babel';
+const json = require('rollup-plugin-json');
+const resolve = require('rollup-plugin-node-resolve');
+const babel = require('rollup-plugin-babel');
 
-export default {
+module.exports = {
     input: 'core/test/main.js',
     output: {
-        file: 'build/bundle.iife.js',
-        name: 'myBundle',
+        file: 'build/dialog.js',
+        name: 'dialog',
         format: 'iife'
     },
     plugins: [

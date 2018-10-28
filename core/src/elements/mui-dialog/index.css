@@ -1,0 +1,21 @@
+.mui-dialog{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+    touch-action: manipulation;
+}
+
+.dialog__mask{
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    border: none;
+    background-color: rgba(0, 0, 0, .2);
+}

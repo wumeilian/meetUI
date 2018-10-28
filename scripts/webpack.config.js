@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const components = process.argv.slice(2);
 
 const entrys = {};
@@ -26,6 +27,13 @@ const options = {
     mode: 'development',
     module: {
         rules:[
+            {
+                test: /\.css$/,
+                use: [
+                    'style-loader',
+                    'css-loader'
+                ]
+            },
             {
                 test: /\.js$/,
                 loader: 'babel-loader'

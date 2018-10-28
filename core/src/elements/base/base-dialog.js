@@ -22,4 +22,20 @@ export default class BaseDialogElement extends BaseElement{
     hide(){
         this._setVisible(false)
     }
+
+    // life-cycle 首次插入到DOM时调用
+    connectedCallback(){
+        console.log('connectedCallback，life-cycle 首次插入到DOM');
+    }
+
+    // life-cycle 属性变化时
+    attributeChangedCallback(){
+        console.log('attributeChangedCallback, life-cycle 属性变化时');
+    }
+
+    // life-cycle 被移除时
+    disconnectedCallback(){
+        console.log('attributeChangedCallback, life-cycle 从DOM移除时');
+    }
+
 }

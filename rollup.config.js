@@ -3,7 +3,7 @@ const resolve = require('rollup-plugin-node-resolve');
 const babel = require('rollup-plugin-babel');
 
 module.exports = {
-    input: 'core/test/main.js',
+    input: 'examples/dialog/index.js',
     output: {
         file: 'build/dialog.js',
         name: 'dialog',

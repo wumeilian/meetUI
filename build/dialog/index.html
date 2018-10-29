@@ -3,6 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+    <script type="text/javascript">
+        (function() {
+            function resetFontSize() {
+                var winWidth = window.innerWidth || window.screen.width;
+                if (winWidth > 750) {
+                    winWidth = 750;
+                }
+                document.documentElement.style.fontSize = winWidth / 375 * 10 + 'px';
+            }
+            resetFontSize();
+        })();
+    </script>
 </head>
 <body>
 
@@ -14,22 +27,8 @@
         </mui-dialog>
     </template>
 
-    <div id="parentElement">
-        <span id="childElement">foo bar</span>
-    </div>
-
-    <script>
-        // Create a new, plain <span> element
-        var sp1 = document.createElement("span");
-
-        // Get a reference to the element, before we want to insert the element
-        var sp2 = document.getElementById("childElement");
-        // Get a reference to the parent element
-        var parentDiv = sp2.parentNode;
-
-        // Insert the new element into the DOM before sp2
-        parentDiv.insertBefore(sp1, sp2);
-    </script>
+    <button id="btn1">show</button>
+    <button id="btn2">hide</button>
 
     <!--<mui-confirm-dialog id="dialog">12</mui-confirm-dialog>-->
     <!--<div id="a">-->

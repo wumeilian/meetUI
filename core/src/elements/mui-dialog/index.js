@@ -1,10 +1,21 @@
 import './index.css';
 import BaseDialogElement from '../base/base-dialog';
+import utils from '../../common/libs/utils'
 
 export default class DialogElement extends BaseDialogElement{
 
     constructor(){
-        super()
+        super();
+
+        this._compile();
+    }
+
+    get _mask() {
+        return utils.findChild(this, '.dialog__mask');
+    }
+
+    get _dialog() {
+        return utils.findChild(this, '.dialog__wrapper')
     }
 
     _compile(){
@@ -23,12 +34,30 @@ export default class DialogElement extends BaseDialogElement{
          * </mui-dialog>
          */
 
+        // 创建一个fragment暂时存放mui-dialog中的所有子元素
         const content = document.createDocumentFragment();
+        while (this.firstChild){
+            content.appendChild(this.firstChild);
+        }
+
+        // 创建mask和wrapper
         const mask = document.createElement('div');
         mask.classList.add('dialog__mask');
 
-        this.insertBefore(mask, this.children[0])
+        const wrapper = document.createElement('div')
+        wrapper.classList.add('dialog__wrapper');
 
+        const container = document.createElement('div')
+        container.classList.add('dialog__container');
+        wrapper.appendChild(container);
+
+        this.appendChild(mask);
+        this.appendChild(wrapper);
+        // container中放入自定义子元素片段
+        this._dialog.children[0].append(content)
+
+        this._mask.style.zIndex = 20000;
+        this._dialog.style.zIndex = 20001;
     }
 }
 

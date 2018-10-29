@@ -86,6 +86,94 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./core/src/common/index.js":
+/*!**********************************!*\
+  !*** ./core/src/common/index.js ***!
+  \**********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _libs_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./libs/utils */ "./core/src/common/libs/utils.js");
+
+
+var mui = {
+    util: _libs_utils__WEBPACK_IMPORTED_MODULE_0__["default"]
+};
+
+mui.createElement = _libs_utils__WEBPACK_IMPORTED_MODULE_0__["default"].createElement;
+
+/* harmony default export */ __webpack_exports__["default"] = (mui);
+
+/***/ }),
+
+/***/ "./core/src/common/libs/utils.js":
+/*!***************************************!*\
+  !*** ./core/src/common/libs/utils.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var util = {};
+
+/**
+ * @param {String/Function} query dot class name or node name or matcher function.
+ * @return {Function}
+ */
+util.prepareQuery = function (query) {
+    return query instanceof Function ? query : function (element) {
+        return util.match(element, query);
+    };
+};
+
+/**
+ * @param {Element} e
+ * @param {String/Function} s CSS Selector.
+ * @return {Boolean}
+ */
+util.match = function (e, s) {
+    return (e.matches || e.webkitMatchesSelector || e.mozMatchesSelector || e.msMatchesSelector).call(e, s);
+};
+
+/**
+ * @param {Element} element
+ * @param {String/Function} query dot class name or node name or matcher function.
+ * @return {HTMLElement/null}
+ */
+util.findChild = function (element, query) {
+    var match = util.prepareQuery(query);
+
+    // Caution: `element.children` is `undefined` in some environments if `element` is `svg`
+    for (var i = 0; i < element.childNodes.length; i++) {
+        var node = element.childNodes[i];
+        if (node.nodeType !== Node.ELEMENT_NODE) {
+            // process only element nodes
+            continue;
+        }
+        if (match(node)) {
+            return node;
+        }
+    }
+    return null;
+};
+
+util.isInstance = function (obj, instance) {
+    return Object.prototype.toString.call(obj).toLowerCase() === "[object " + instance.toLowerCase() + "]";
+};
+
+util.createElement = function (IDSelector, options) {
+    var template = document.getElementById(IDSelector).content;
+    var cloneTemplate = document.importNode(template, true);
+    document.body.appendChild(cloneTemplate);
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (util);
+
+/***/ }),
+
 /***/ "./core/src/elements/base/base-dialog.js":
 /*!***********************************************!*\
   !*** ./core/src/elements/base/base-dialog.js ***!
@@ -112,7 +200,10 @@ var BaseDialogElement = function (_BaseElement) {
     function BaseDialogElement() {
         _classCallCheck(this, BaseDialogElement);
 
-        return _possibleConstructorReturn(this, (BaseDialogElement.__proto__ || Object.getPrototypeOf(BaseDialogElement)).call(this));
+        var _this = _possibleConstructorReturn(this, (BaseDialogElement.__proto__ || Object.getPrototypeOf(BaseDialogElement)).call(this));
+
+        _this._cancel = _this._cancel.bind(_this);
+        return _this;
     }
 
     // 显隐转换
@@ -127,6 +218,11 @@ var BaseDialogElement = function (_BaseElement) {
         key: '_setVisible',
         value: function _setVisible(shouldShow) {
             this._toggleStyle(shouldShow);
+        }
+    }, {
+        key: '_cancel',
+        value: function _cancel() {
+            this._setVisible(false);
         }
     }, {
         key: 'show',
@@ -145,6 +241,9 @@ var BaseDialogElement = function (_BaseElement) {
         key: 'connectedCallback',
         value: function connectedCallback() {
             console.log('connectedCallback，life-cycle 首次插入到DOM');
+            if (this._mask) {
+                this._mask.addEventListener('click', this._cancel, false);
+            }
         }
 
         // life-cycle 属性变化时
@@ -255,6 +354,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index.css */ "./core/src/elements/mui-dialog/index.css");
 /* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_index_css__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _base_base_dialog__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../base/base-dialog */ "./core/src/elements/base/base-dialog.js");
+/* harmony import */ var _common_libs_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../common/libs/utils */ "./core/src/common/libs/utils.js");
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -266,13 +366,17 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
+
 var DialogElement = function (_BaseDialogElement) {
     _inherits(DialogElement, _BaseDialogElement);
 
     function DialogElement() {
         _classCallCheck(this, DialogElement);
 
-        return _possibleConstructorReturn(this, (DialogElement.__proto__ || Object.getPrototypeOf(DialogElement)).call(this));
+        var _this = _possibleConstructorReturn(this, (DialogElement.__proto__ || Object.getPrototypeOf(DialogElement)).call(this));
+
+        _this._compile();
+        return _this;
     }
 
     _createClass(DialogElement, [{
@@ -293,11 +397,40 @@ var DialogElement = function (_BaseDialogElement) {
              * </mui-dialog>
              */
 
+            // 创建一个fragment暂时存放mui-dialog中的所有子元素
             var content = document.createDocumentFragment();
+            while (this.firstChild) {
+                content.appendChild(this.firstChild);
+            }
+
+            // 创建mask和wrapper
             var mask = document.createElement('div');
             mask.classList.add('dialog__mask');
 
-            this.insertBefore(mask, this.children[0]);
+            var wrapper = document.createElement('div');
+            wrapper.classList.add('dialog__wrapper');
+
+            var container = document.createElement('div');
+            container.classList.add('dialog__container');
+            wrapper.appendChild(container);
+
+            this.appendChild(mask);
+            this.appendChild(wrapper);
+            // container中放入自定义子元素片段
+            this._dialog.children[0].append(content);
+
+            this._mask.style.zIndex = 20000;
+            this._dialog.style.zIndex = 20001;
+        }
+    }, {
+        key: '_mask',
+        get: function get() {
+            return _common_libs_utils__WEBPACK_IMPORTED_MODULE_2__["default"].findChild(this, '.dialog__mask');
+        }
+    }, {
+        key: '_dialog',
+        get: function get() {
+            return _common_libs_utils__WEBPACK_IMPORTED_MODULE_2__["default"].findChild(this, '.dialog__wrapper');
         }
     }]);
 
@@ -308,6 +441,24 @@ var DialogElement = function (_BaseDialogElement) {
 
 
 customElements.define('mui-dialog', DialogElement);
+
+/***/ }),
+
+/***/ "./core/src/index.esm.js":
+/*!*******************************!*\
+  !*** ./core/src/index.esm.js ***!
+  \*******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _polyfills_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./polyfills/index */ "./core/src/polyfills/index.js");
+/* harmony import */ var _common_index__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./common/index */ "./core/src/common/index.js");
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = (_common_index__WEBPACK_IMPORTED_MODULE_1__["default"]);
 
 /***/ }),
 
@@ -353,10 +504,18 @@ if (window.customElements) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _core_src_polyfills_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../core/src/polyfills/index */ "./core/src/polyfills/index.js");
+/* harmony import */ var _core_src_index_esm__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../core/src/index.esm */ "./core/src/index.esm.js");
 /* harmony import */ var _ele_mui_dialog_index__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @ele/mui-dialog/index */ "./core/src/elements/mui-dialog/index.js");
 
 
+
+_core_src_index_esm__WEBPACK_IMPORTED_MODULE_0__["default"].createElement('confirm-dialog.html', {});
+
+var dialog = document.getElementById('my-dialog');
+
+document.querySelector('#btn1').addEventListener('click', function () {
+    dialog.show();
+});
 
 /***/ }),
 

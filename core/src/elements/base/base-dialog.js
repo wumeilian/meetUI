@@ -3,7 +3,8 @@ import BaseElement from './base-element';
 export default class BaseDialogElement extends BaseElement{
 
     constructor(){
-        super()
+        super();
+        this._cancel = this._cancel.bind(this);
     }
 
     // 显隐转换
@@ -15,17 +16,24 @@ export default class BaseDialogElement extends BaseElement{
         this._toggleStyle(shouldShow)
     }
 
-    show(){
+    _cancel() {
+        this._setVisible(false)
+    }
+
+    show() {
         this._setVisible(true)
     }
 
-    hide(){
+    hide() {
         this._setVisible(false)
     }
 
     // life-cycle 首次插入到DOM时调用
     connectedCallback(){
         console.log('connectedCallback，life-cycle 首次插入到DOM');
+        if(this._mask){
+            this._mask.addEventListener('click', this._cancel, false)
+        }
     }
 
     // life-cycle 属性变化时

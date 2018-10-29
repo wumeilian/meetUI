@@ -222,6 +222,7 @@ var BaseDialogElement = function (_BaseElement) {
     }, {
         key: '_cancel',
         value: function _cancel() {
+            console.log('点击了cancel');
             this._setVisible(false);
         }
     }, {
@@ -242,7 +243,7 @@ var BaseDialogElement = function (_BaseElement) {
         value: function connectedCallback() {
             console.log('connectedCallback，life-cycle 首次插入到DOM');
             if (this._mask) {
-                this._mask.addEventListener('click', this._cancel, false);
+                this._mask.addEventListener('click', this._cancel);
             }
         }
 
@@ -2535,6 +2536,25 @@ if (!priorCustomElements || priorCustomElements['forcePolyfill'] || typeof prior
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/index.js!./core/css/base.css":
+/*!*****************************************************!*\
+  !*** ./node_modules/css-loader!./core/css/base.css ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, ":root{\r\n     --text-font-size: 1.6rem\r\n }", ""]);
+
+// exports
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/index.js!./core/src/elements/mui-dialog/index.css":
 /*!**************************************************************************!*\
   !*** ./node_modules/css-loader!./core/src/elements/mui-dialog/index.css ***!
@@ -2544,10 +2564,10 @@ if (!priorCustomElements || priorCustomElements['forcePolyfill'] || typeof prior
 
 exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
 // imports
-
+exports.i(__webpack_require__(/*! -!../../../../node_modules/css-loader!../../../css/base.css */ "./node_modules/css-loader/index.js!./core/css/base.css"), "");
 
 // module
-exports.push([module.i, ".mui-dialog{\r\n    position: absolute;\r\n    top: 0;\r\n    bottom: 0;\r\n    left: 0;\r\n    right: 0;\r\n    overflow: hidden;\r\n    touch-action: manipulation;\r\n}\r\n\r\n.dialog__mask{\r\n    padding: 0;\r\n    margin: 0;\r\n    position: absolute;\r\n    top: 0;\r\n    right: 0;\r\n    left: 0;\r\n    bottom: 0;\r\n    border: none;\r\n    background-color: rgba(0, 0, 0, .2);\r\n}", ""]);
+exports.push([module.i, "mui-dialog{\r\n    position: absolute;\r\n    top: 0;\r\n    bottom: 0;\r\n    left: 0;\r\n    right: 0;\r\n    overflow: hidden;\r\n    touch-action: manipulation;\r\n}\r\n\r\n.dialog__mask{\r\n    padding: 0;\r\n    margin: 0;\r\n    position: absolute;\r\n    top: 0;\r\n    right: 0;\r\n    left: 0;\r\n    bottom: 0;\r\n    border: none;\r\n    background-color: rgba(0, 0, 0, .2);\r\n}\r\n\r\n.dialog__wrapper{\r\n    position: absolute;\r\n    background-color: #fff;\r\n    width: 30rem;\r\n    top: 50%;\r\n    left: 50%;\r\n    transform: translate(-50%,-50%);\r\n    border-radius: 0.8rem;\r\n}\r\n\r\n.dialog__header, .dialog__footer {\r\n    height: 4.4rem;\r\n    font-size: var(--text-font-size);\r\n    line-height: 4.4rem;\r\n    text-align: center\r\n}\r\n\r\n.dialog__header {\r\n    box-sizing: border-box;\r\n}\r\n\r\n.dialog__footer {\r\n    border-top: 1px solid #ddd;\r\n    box-sizing: border-box;\r\n}\r\n\r\n\r\n.dialog__body{\r\n    padding: 1.5rem;\r\n    min-height: 3rem;\r\n    font-size: var(--text-font-size);\r\n    text-align: center;\r\n}", ""]);
 
 // exports
 

@@ -17,6 +17,7 @@ export default class BaseDialogElement extends BaseElement{
     }
 
     _cancel() {
+        console.log('点击了cancel');
         this._setVisible(false)
     }
 
@@ -32,7 +33,7 @@ export default class BaseDialogElement extends BaseElement{
     connectedCallback(){
         console.log('connectedCallback，life-cycle 首次插入到DOM');
         if(this._mask){
-            this._mask.addEventListener('click', this._cancel, false)
+            this._mask.addEventListener('click', this._cancel)
         }
     }
 

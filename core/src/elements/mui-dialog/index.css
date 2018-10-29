@@ -1,4 +1,6 @@
-.mui-dialog{
+@import "../../../css/base.css";
+
+mui-dialog{
     position: absolute;
     top: 0;
     bottom: 0;
@@ -18,4 +20,38 @@
     bottom: 0;
     border: none;
     background-color: rgba(0, 0, 0, .2);
+}
+
+.dialog__wrapper{
+    position: absolute;
+    background-color: #fff;
+    width: 30rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    border-radius: 0.8rem;
+}
+
+.dialog__header, .dialog__footer {
+    height: 4.4rem;
+    font-size: var(--text-font-size);
+    line-height: 4.4rem;
+    text-align: center
+}
+
+.dialog__header {
+    box-sizing: border-box;
+}
+
+.dialog__footer {
+    border-top: 1px solid #ddd;
+    box-sizing: border-box;
+}
+
+
+.dialog__body{
+    padding: 1.5rem;
+    min-height: 3rem;
+    font-size: var(--text-font-size);
+    text-align: center;
 }

@@ -19,13 +19,13 @@ mui-dialog{
     left: 0;
     bottom: 0;
     border: none;
-    background-color: rgba(0, 0, 0, .2);
+    background-color: rgba(0, 0, 0, .4);
 }
 
 .dialog__wrapper{
     position: absolute;
     background-color: #fff;
-    width: 30rem;
+    width: 28rem;
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);

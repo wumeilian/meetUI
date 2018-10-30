@@ -510,12 +510,19 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+// 创建dialog
 _core_src_index_esm__WEBPACK_IMPORTED_MODULE_0__["default"].createElement('confirm-dialog.html', {});
 
-var dialog = document.getElementById('my-dialog');
+var dialog = document.getElementById('my-dialog'),
+    showBtnEl = document.querySelector('#btn1'),
+    closeEl = document.querySelector('#my-dialog').querySelector('.dialog__footer');
 
-document.querySelector('#btn1').addEventListener('click', function () {
+showBtnEl.addEventListener('click', function () {
     dialog.show();
+});
+
+closeEl.addEventListener('click', function () {
+    dialog.hide();
 });
 
 /***/ }),
@@ -2548,7 +2555,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "mui-dialog{overflow:hidden;-ms-touch-action:manipulation;touch-action:manipulation}.dialog__mask,mui-dialog{position:absolute;top:0;bottom:0;left:0;right:0}.dialog__mask{padding:0;margin:0;border:none;background-color:rgba(0, 0, 0, .2)}.dialog__wrapper{position:absolute;background-color:#fff;width:30rem;top:50%;left:50%;-webkit-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%);border-radius:.8rem}.dialog__footer,.dialog__header{height:4.4rem;font-size:1.6rem;line-height:4.4rem;text-align:center}.dialog__footer,.dialog__header{-webkit-box-sizing:border-box;box-sizing:border-box}.dialog__footer{border-top:1px solid #ddd}.dialog__body{padding:1.5rem;min-height:3rem;font-size:1.6rem;text-align:center}", ""]);
+exports.push([module.i, "mui-dialog{overflow:hidden;-ms-touch-action:manipulation;touch-action:manipulation}.dialog__mask,mui-dialog{position:absolute;top:0;bottom:0;left:0;right:0}.dialog__mask{padding:0;margin:0;border:none;background-color:rgba(0, 0, 0, .4)}.dialog__wrapper{position:absolute;background-color:#fff;width:28rem;top:50%;left:50%;-webkit-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%);border-radius:.8rem}.dialog__footer,.dialog__header{height:4.4rem;font-size:1.6rem;line-height:4.4rem;text-align:center}.dialog__footer,.dialog__header{-webkit-box-sizing:border-box;box-sizing:border-box}.dialog__footer{border-top:1px solid #ddd}.dialog__body{padding:1.5rem;min-height:3rem;font-size:1.6rem;text-align:center}", ""]);
 
 // exports
 

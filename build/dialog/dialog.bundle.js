@@ -321,7 +321,7 @@ var BaseElement = function (_getElementClass) {
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../../../node_modules/css-loader!./index.css */ "./node_modules/css-loader/index.js!./core/src/elements/mui-dialog/index.css");
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader!../../../../node_modules/postcss-loader/src!./index.css */ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/src/index.js!./core/src/elements/mui-dialog/index.css");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -2536,38 +2536,19 @@ if (!priorCustomElements || priorCustomElements['forcePolyfill'] || typeof prior
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./core/css/base.css":
-/*!*****************************************************!*\
-  !*** ./node_modules/css-loader!./core/css/base.css ***!
-  \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
-// imports
-
-
-// module
-exports.push([module.i, ":root{\r\n     --text-font-size: 1.6rem\r\n }", ""]);
-
-// exports
-
-
-/***/ }),
-
-/***/ "./node_modules/css-loader/index.js!./core/src/elements/mui-dialog/index.css":
-/*!**************************************************************************!*\
-  !*** ./node_modules/css-loader!./core/src/elements/mui-dialog/index.css ***!
-  \**************************************************************************/
+/***/ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/src/index.js!./core/src/elements/mui-dialog/index.css":
+/*!************************************************************************************************************!*\
+  !*** ./node_modules/css-loader!./node_modules/postcss-loader/src!./core/src/elements/mui-dialog/index.css ***!
+  \************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
 // imports
-exports.i(__webpack_require__(/*! -!../../../../node_modules/css-loader!../../../css/base.css */ "./node_modules/css-loader/index.js!./core/css/base.css"), "");
+
 
 // module
-exports.push([module.i, "mui-dialog{\r\n    position: absolute;\r\n    top: 0;\r\n    bottom: 0;\r\n    left: 0;\r\n    right: 0;\r\n    overflow: hidden;\r\n    touch-action: manipulation;\r\n}\r\n\r\n.dialog__mask{\r\n    padding: 0;\r\n    margin: 0;\r\n    position: absolute;\r\n    top: 0;\r\n    right: 0;\r\n    left: 0;\r\n    bottom: 0;\r\n    border: none;\r\n    background-color: rgba(0, 0, 0, .2);\r\n}\r\n\r\n.dialog__wrapper{\r\n    position: absolute;\r\n    background-color: #fff;\r\n    width: 30rem;\r\n    top: 50%;\r\n    left: 50%;\r\n    transform: translate(-50%,-50%);\r\n    border-radius: 0.8rem;\r\n}\r\n\r\n.dialog__header, .dialog__footer {\r\n    height: 4.4rem;\r\n    font-size: var(--text-font-size);\r\n    line-height: 4.4rem;\r\n    text-align: center\r\n}\r\n\r\n.dialog__header {\r\n    box-sizing: border-box;\r\n}\r\n\r\n.dialog__footer {\r\n    border-top: 1px solid #ddd;\r\n    box-sizing: border-box;\r\n}\r\n\r\n\r\n.dialog__body{\r\n    padding: 1.5rem;\r\n    min-height: 3rem;\r\n    font-size: var(--text-font-size);\r\n    text-align: center;\r\n}", ""]);
+exports.push([module.i, "mui-dialog{overflow:hidden;-ms-touch-action:manipulation;touch-action:manipulation}.dialog__mask,mui-dialog{position:absolute;top:0;bottom:0;left:0;right:0}.dialog__mask{padding:0;margin:0;border:none;background-color:rgba(0, 0, 0, .2)}.dialog__wrapper{position:absolute;background-color:#fff;width:30rem;top:50%;left:50%;-webkit-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%);border-radius:.8rem}.dialog__footer,.dialog__header{height:4.4rem;font-size:1.6rem;line-height:4.4rem;text-align:center}.dialog__footer,.dialog__header{-webkit-box-sizing:border-box;box-sizing:border-box}.dialog__footer{border-top:1px solid #ddd}.dialog__body{padding:1.5rem;min-height:3rem;font-size:1.6rem;text-align:center}", ""]);
 
 // exports
 

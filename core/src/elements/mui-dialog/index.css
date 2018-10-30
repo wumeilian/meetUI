@@ -1,4 +1,4 @@
-@import "../../../css/base.css";
+@import url("../../../css/base.css");
 
 mui-dialog{
     position: absolute;

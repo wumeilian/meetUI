@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./examples/dialog/index.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./examples/confirm-dialog/index.js");
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -132,9 +132,110 @@ var mui = {
     util: _libs_util__WEBPACK_IMPORTED_MODULE_0__["default"]
 };
 
-mui.createElement = _libs_util__WEBPACK_IMPORTED_MODULE_0__["default"].createElement;
+mui.createElement = function (selector) {
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+    var element = _libs_util__WEBPACK_IMPORTED_MODULE_0__["default"].createElement(selector, options);
+    var target = options.append && options.append instanceof HTMLElement ? options.append : document.body;
+
+    target.insertBefore(element, options.insertBefore || null);
+    return element;
+};
 
 /* harmony default export */ __webpack_exports__["default"] = (mui);
+
+/***/ }),
+
+/***/ "./core/src/common/libs/commonUtils.js":
+/*!*********************************************!*\
+  !*** ./core/src/common/libs/commonUtils.js ***!
+  \*********************************************/
+/*! exports provided: deepExtend, merge, isType */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "deepExtend", function() { return deepExtend; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "merge", function() { return merge; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isType", function() { return isType; });
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var deepExtend = function deepExtend(out) {
+    out = out || {};
+
+    for (var i = 1, len = arguments.length; i < len; ++i) {
+        var obj = arguments[i];
+
+        if (!obj) {
+            continue;
+        }
+
+        for (var key in obj) {
+            if (!obj.hasOwnProperty(key)) {
+                continue;
+            }
+
+            // based on https://javascriptweblog.wordpress.com/2011/08/08/fixing-the-javascript-typeof-operator/
+            if (Object.prototype.toString.call(obj[key]) === '[object Object]') {
+                out[key] = deepExtend(out[key], obj[key]);
+                continue;
+            }
+
+            out[key] = obj[key];
+        }
+    }
+
+    return out;
+};
+
+function merge() /* obj1, obj2, obj3, ... */{
+    var result = {};
+    function assignValue(val, key) {
+        if (_typeof(result[key]) === 'object' && (typeof val === 'undefined' ? 'undefined' : _typeof(val)) === 'object') {
+            result[key] = merge(result[key], val);
+        } else {
+            result[key] = val;
+        }
+    }
+
+    for (var i = 0, l = arguments.length; i < l; i++) {
+        forEach(arguments[i], assignValue);
+    }
+    return result;
+}
+
+function forEach(obj, fn) {
+    // Don't bother if no value provided
+    if (obj === null || typeof obj === 'undefined') {
+        return;
+    }
+
+    // Force an array if not already something iterable
+    if ((typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) !== 'object') {
+        /*eslint no-param-reassign:0*/
+        obj = [obj];
+    }
+
+    if (isType(obj, 'array')) {
+        // Iterate over array values
+        for (var i = 0, l = obj.length; i < l; i++) {
+            fn.call(null, obj[i], i, obj);
+        }
+    } else {
+        // Iterate over object keys
+        for (var key in obj) {
+            if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                fn.call(null, obj[key], key, obj);
+            }
+        }
+    }
+}
+
+var isType = function isType(obj, type) {
+    return Object.prototype.toString.call(obj).toLowerCase() === "[object " + type + "]";
+};
+
+
 
 /***/ }),
 
@@ -196,9 +297,9 @@ util.isInstance = function (obj, instance) {
 
 util.createElement = function (IDSelector, options) {
     var template = document.getElementById(IDSelector).content;
-    util.setAttrOptions(template, options);
+    util.setAttrOptions(template, options.conf || {});
     var cloneTemplate = document.importNode(template, true);
-    document.body.appendChild(cloneTemplate);
+    return cloneTemplate;
 };
 
 util.setAttrOptions = function (template, options) {
@@ -278,6 +379,43 @@ util.getClosest = function (elem, selector) {
     return null;
 };
 
+util.colorLog = function (text, color) {
+    console.log('%c ' + text, 'background: #222; color: ' + (color ? color : '#bada55'));
+};
+
+// 清除attr的方法，配置参数通过conf- 传递进来，所以创建完成后要通过此方法移除
+util.clearConfAttr = function () {
+    var _this = this;
+
+    var confAttrs = [];
+    var attrs = this.attributes;
+
+    for (var i = 0; i < this.attributes.length; i++) {
+        var attrNAme = attrs[i].name;
+        if (attrNAme.indexOf('conf-') > -1) {
+            confAttrs.push(attrNAme);
+        }
+    }
+
+    confAttrs.forEach(function (item) {
+        _this.removeAttribute(item);
+    });
+};
+
+util.getConfAttr = function () {
+    var conf = {};
+    var attrs = this.attributes;
+
+    for (var i = 0; i < this.attributes.length; i++) {
+        var attrNAme = attrs[i].name;
+        if (attrNAme.indexOf('conf-') > -1) {
+            conf[attrNAme.replace('conf-', '')] = attrs[i].value;
+        }
+    }
+
+    return conf;
+};
+
 /* harmony default export */ __webpack_exports__["default"] = (util);
 
 /***/ }),
@@ -292,6 +430,7 @@ util.getClosest = function (elem, selector) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _base_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./base-element */ "./core/src/elements/base/base-element.js");
+/* harmony import */ var _common_libs_util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../common/libs/util */ "./core/src/common/libs/util.js");
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -299,6 +438,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 
 
 
@@ -364,7 +504,11 @@ var BaseDialogElement = function (_BaseElement) {
     }, {
         key: 'connectedCallback',
         value: function connectedCallback() {
-            console.log('connectedCallback，life-cycle 首次插入到DOM');
+            _common_libs_util__WEBPACK_IMPORTED_MODULE_1__["default"].colorLog('connectedCallback，life-cycle 首次插入到DOM');
+
+            // 移除所有attr
+            _common_libs_util__WEBPACK_IMPORTED_MODULE_1__["default"].clearConfAttr.call(this);
+
             if (this._mask) {
                 this._mask.addEventListener('click', this._cancel);
             }
@@ -375,7 +519,7 @@ var BaseDialogElement = function (_BaseElement) {
     }, {
         key: 'attributeChangedCallback',
         value: function attributeChangedCallback() {
-            console.log('attributeChangedCallback, life-cycle 属性变化时');
+            _common_libs_util__WEBPACK_IMPORTED_MODULE_1__["default"].colorLog('attributeChangedCallback, life-cycle 属性变化时');
         }
 
         // life-cycle 被移除时
@@ -436,15 +580,15 @@ var BaseElement = function (_getElementClass) {
 
 /***/ }),
 
-/***/ "./core/src/elements/mui-dialog/index.css":
-/*!************************************************!*\
-  !*** ./core/src/elements/mui-dialog/index.css ***!
-  \************************************************/
+/***/ "./core/src/elements/mui-confirm-dialog/index.css":
+/*!********************************************************!*\
+  !*** ./core/src/elements/mui-confirm-dialog/index.css ***!
+  \********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../../../node_modules/css-loader!../../../../node_modules/postcss-loader/src!./index.css */ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/src/index.js!./core/src/elements/mui-dialog/index.css");
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader!../../../../node_modules/postcss-loader/src!./index.css */ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/src/index.js!./core/src/elements/mui-confirm-dialog/index.css");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -466,19 +610,20 @@ if(false) {}
 
 /***/ }),
 
-/***/ "./core/src/elements/mui-dialog/index.js":
-/*!***********************************************!*\
-  !*** ./core/src/elements/mui-dialog/index.js ***!
-  \***********************************************/
+/***/ "./core/src/elements/mui-confirm-dialog/index.js":
+/*!*******************************************************!*\
+  !*** ./core/src/elements/mui-confirm-dialog/index.js ***!
+  \*******************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index.css */ "./core/src/elements/mui-dialog/index.css");
+/* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index.css */ "./core/src/elements/mui-confirm-dialog/index.css");
 /* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_index_css__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _base_base_dialog__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../base/base-dialog */ "./core/src/elements/base/base-dialog.js");
 /* harmony import */ var _common_libs_util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../common/libs/util */ "./core/src/common/libs/util.js");
+/* harmony import */ var _common_libs_commonUtils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../common/libs/commonUtils */ "./core/src/common/libs/commonUtils.js");
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -491,23 +636,26 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 
-var scheme = {
-    scrollContainer: '.dialog__container'
+
+var textObj = {
+    message: '这里是一条信息',
+    cancel: '取消',
+    confirm: '确定'
 };
 
-var DialogElement = function (_BaseDialogElement) {
-    _inherits(DialogElement, _BaseDialogElement);
+var ConfirmDialogElement = function (_BaseDialogElement) {
+    _inherits(ConfirmDialogElement, _BaseDialogElement);
 
-    function DialogElement() {
-        _classCallCheck(this, DialogElement);
+    function ConfirmDialogElement() {
+        _classCallCheck(this, ConfirmDialogElement);
 
-        var _this = _possibleConstructorReturn(this, (DialogElement.__proto__ || Object.getPrototypeOf(DialogElement)).call(this));
+        var _this = _possibleConstructorReturn(this, (ConfirmDialogElement.__proto__ || Object.getPrototypeOf(ConfirmDialogElement)).call(this));
 
         _this._compile();
         return _this;
     }
 
-    _createClass(DialogElement, [{
+    _createClass(ConfirmDialogElement, [{
         key: '_compile',
         value: function _compile() {
             this.style.display = 'none';
@@ -516,44 +664,35 @@ var DialogElement = function (_BaseDialogElement) {
             /**
              * dialog组件结构
              *
-             * <mui-dialog class="mui-dialog" style="none">
+             * <mui-confirm-dialog class="mui-dialog" style="none">
              *   <div class="dialog__mask"></div>
              *   <div class="dialog__wrapper">
              *      <div class="dialog__container">
+             *          <div class="confirm__message"></div>
+             *          <div class="dialog__footer">
+             *             <div class="dialog__cancel"></div>
+             *             <div class="dialog__confirm"></div>
+             *          </div>
              *      </div>
              *   </div>
              * </mui-dialog>
              */
 
-            // 创建一个fragment暂时存放mui-dialog中的所有子元素
-            var content = document.createDocumentFragment();
-            while (this.firstChild) {
-                content.appendChild(this.firstChild);
-            }
+            // 设置的可滚动区域
+            var scAttr = _common_libs_util__WEBPACK_IMPORTED_MODULE_2__["default"].getConfAttr.call(this);
+            var text = Object(_common_libs_commonUtils__WEBPACK_IMPORTED_MODULE_3__["merge"])(textObj, scAttr);
 
-            // 创建mask和wrapper
-            var mask = document.createElement('div');
-            mask.classList.add('dialog__mask');
+            console.log('text', text);
 
-            var wrapper = document.createElement('div');
-            wrapper.classList.add('dialog__wrapper');
+            var template = '\n         <div class="dialog__mask"></div>\n            <div class="dialog__wrapper">\n               <div class="dialog__container">\n                   <div class="confirm__message">' + text.message + '</div>\n                   <div class="dialog__footer">\n                     <div class="dialog__cancel">' + text.cancel + '</div>\n                     <div class="dialog__confirm">' + text.confirm + '</div>\n                   </div>\n              </div>\n           </div>\n        ';
 
-            var container = document.createElement('div');
-            container.classList.add('dialog__container');
-            wrapper.appendChild(container);
+            // String HTML 插入到DOM中
+            this.insertAdjacentHTML('beforeend', template);
 
-            this.appendChild(mask);
-            this.appendChild(wrapper);
+            _common_libs_util__WEBPACK_IMPORTED_MODULE_2__["default"].colorLog('生命周期，插入到dom');
 
-            // container中放入自定义子元素片段
-            this._dialog.children[0].append(content);
             this._mask.style.zIndex = 20000;
             this._dialog.style.zIndex = 20001;
-
-            // 设置的可滚动区域
-            var scAttr = this.attributes['conf-scrollSelector'];
-            var scrollSelector = scAttr ? scAttr.value : scheme.scrollContainer;
-            _common_libs_util__WEBPACK_IMPORTED_MODULE_2__["default"].elementOutSidePreventScroll(this, scrollSelector);
         }
     }, {
         key: '_mask',
@@ -565,15 +704,25 @@ var DialogElement = function (_BaseDialogElement) {
         get: function get() {
             return _common_libs_util__WEBPACK_IMPORTED_MODULE_2__["default"].findChild(this, '.dialog__wrapper');
         }
+    }, {
+        key: '_unsure',
+        get: function get() {
+            return _common_libs_util__WEBPACK_IMPORTED_MODULE_2__["default"].findChild(this, '.dialog__cancel');
+        }
+    }, {
+        key: '_ensure',
+        get: function get() {
+            return _common_libs_util__WEBPACK_IMPORTED_MODULE_2__["default"].findChild(this, '.dialog__confirm');
+        }
     }]);
 
-    return DialogElement;
+    return ConfirmDialogElement;
 }(_base_base_dialog__WEBPACK_IMPORTED_MODULE_1__["default"]);
 
-/* harmony default export */ __webpack_exports__["default"] = (DialogElement);
+/* harmony default export */ __webpack_exports__["default"] = (ConfirmDialogElement);
 
 
-customElements.define('mui-dialog', DialogElement);
+customElements.define('mui-confirm-dialog', ConfirmDialogElement);
 
 /***/ }),
 
@@ -650,15 +799,15 @@ if (window.customElements) {
 
 /***/ }),
 
-/***/ "./examples/dialog/index.css":
-/*!***********************************!*\
-  !*** ./examples/dialog/index.css ***!
-  \***********************************/
+/***/ "./examples/confirm-dialog/index.css":
+/*!*******************************************!*\
+  !*** ./examples/confirm-dialog/index.css ***!
+  \*******************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-var content = __webpack_require__(/*! !../../node_modules/css-loader!../../node_modules/postcss-loader/src!./index.css */ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/src/index.js!./examples/dialog/index.css");
+var content = __webpack_require__(/*! !../../node_modules/css-loader!../../node_modules/postcss-loader/src!./index.css */ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/src/index.js!./examples/confirm-dialog/index.css");
 
 if(typeof content === 'string') content = [[module.i, content, '']];
 
@@ -680,21 +829,21 @@ if(false) {}
 
 /***/ }),
 
-/***/ "./examples/dialog/index.js":
-/*!**********************************!*\
-  !*** ./examples/dialog/index.js ***!
-  \**********************************/
+/***/ "./examples/confirm-dialog/index.js":
+/*!******************************************!*\
+  !*** ./examples/confirm-dialog/index.js ***!
+  \******************************************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index.css */ "./examples/dialog/index.css");
+/* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index.css */ "./examples/confirm-dialog/index.css");
 /* harmony import */ var _index_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_index_css__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _core_css_common_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../core/css/common.css */ "./core/css/common.css");
 /* harmony import */ var _core_css_common_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_core_css_common_css__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _core_src_index_esm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../core/src/index.esm */ "./core/src/index.esm.js");
-/* harmony import */ var _ele_mui_dialog_index__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ele/mui-dialog/index */ "./core/src/elements/mui-dialog/index.js");
+/* harmony import */ var _ele_mui_confirm_dialog_index__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @ele/mui-confirm-dialog/index */ "./core/src/elements/mui-confirm-dialog/index.js");
 /* harmony import */ var eruda__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! eruda */ "./node_modules/eruda/eruda.js");
 /* harmony import */ var eruda__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(eruda__WEBPACK_IMPORTED_MODULE_4__);
 
@@ -706,18 +855,25 @@ __webpack_require__.r(__webpack_exports__);
 eruda__WEBPACK_IMPORTED_MODULE_4___default.a.init();
 
 // 创建dialog
-_core_src_index_esm__WEBPACK_IMPORTED_MODULE_2__["default"].createElement('confirm-dialog.html', { scrollSelector: '.dialog__body' });
+_core_src_index_esm__WEBPACK_IMPORTED_MODULE_2__["default"].createElement('confirm-dialog.html', {
+    conf: {
+        message: '这里是显示的message信息',
+        cancel: '取消',
+        confirm: '确定'
+    }
+});
 
 var dialog = document.getElementById('my-dialog'),
+    dialog2 = document.getElementById('my-dialog2'),
     showBtnEl = document.querySelector('#btn1'),
-    closeEl = document.querySelector('#my-dialog').querySelector('.dialog__footer');
+    showBtnEl2 = document.querySelector('#btn2');
 
 showBtnEl.addEventListener('click', function () {
     dialog.show();
 });
 
-closeEl.addEventListener('click', function () {
-    dialog.hide();
+showBtnEl2.addEventListener('click', function () {
+    dialog2.show();
 });
 
 /***/ }),
@@ -2757,10 +2913,10 @@ exports.push([module.i, "*,:after,:before{-webkit-box-sizing:inherit;box-sizing:
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/src/index.js!./core/src/elements/mui-dialog/index.css":
-/*!************************************************************************************************************!*\
-  !*** ./node_modules/css-loader!./node_modules/postcss-loader/src!./core/src/elements/mui-dialog/index.css ***!
-  \************************************************************************************************************/
+/***/ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/src/index.js!./core/src/elements/mui-confirm-dialog/index.css":
+/*!********************************************************************************************************************!*\
+  !*** ./node_modules/css-loader!./node_modules/postcss-loader/src!./core/src/elements/mui-confirm-dialog/index.css ***!
+  \********************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2769,17 +2925,17 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "*,:after,:before{-webkit-box-sizing:inherit;box-sizing:inherit}html{font-size:10px;height:100%;min-height:100%;max-width:750px;margin:0 auto;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-text-size-adjust:100%;-moz-text-size-adjust:100%;-ms-text-size-adjust:100%;text-size-adjust:100%;-webkit-tap-highlight-color:rgba(0, 0, 0, 0)}body{position:relative;background-color:#fff;color:#323232;font-family:STHeiti,Microsoft YaHei,Helvetica,Arial,sans-serif;margin:0;padding:0;-webkit-touch-callout:none;-webkit-font-smoothing:antialiased;-webkit-overflow-scrolling:touch;overflow-scrolling:touch;word-break:break-word}a:active,a:hover{outline:none}input:active,input:focus,textarea:active,textarea:focus{outline:none;-moz-outline-style:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0)}a{text-decoration:none}input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{-webkit-appearance:none!important;margin:0}input[type=number]{-moz-appearance:textfield}table{border-collapse:collapse;border-spacing:0}li,ol,ul{padding:0;margin:0;list-style:none;display:list-item;text-align:-webkit-match-parent}::-webkit-scrollbar{display:none}img{max-width:100%;height:auto;border:0;-webkit-touch-callout:none;-webkit-appearance:none;-moz-appearance:none;appearance:none}h1,h2,h3,h4,h5,h6,p{margin:0;font-weight:400}p{line-height:18px;border:0;outline:0;max-height:100%}input,select{vertical-align:middle}input,select,textarea{-webkit-appearance:none}::-moz-focus-inner{padding:0;border:0}article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section{display:block}blockquote,q{quotes:none}blockquote:after,blockquote:before,q:after,q:before{content:\"\";content:none}button{overflow:visible;cursor:pointer}.hidden{display:none!important;opacity:0!important}.clearfix:after{display:block;content:\"\";visibility:hidden;height:0;clear:both}.clearfix{zoom:1}.clear:after,.clear:before{*zoom:1;display:table;content:\"\";line-height:0}.clear:after{clear:both}.line-bottom:after,.line-top:before{content:\"\";position:absolute;background-color:#ddd;left:0;height:1px;width:100%;-webkit-transform:scaleY(.5);-ms-transform:scaleY(.5);transform:scaleY(.5)}.line-left:before,.line-right:after{content:\"\";position:absolute;background-color:#ddd;top:0;width:1px;height:100%;-webkit-transform:scaleX(.5);-ms-transform:scaleX(.5);transform:scaleX(.5)}.line-bottom:after{bottom:0}.line-top:before{top:0}.line-left:before{left:0}.line-right:after{right:0}.noscroll{overflow:hidden}mui-dialog{overflow:hidden;-ms-touch-action:manipulation;touch-action:manipulation}.dialog__mask,mui-dialog{position:fixed;top:0;bottom:0;left:0;right:0}.dialog__mask{padding:0;margin:0;border:none;background-color:rgba(0, 0, 0, .4)}.dialog__wrapper{position:absolute;background-color:#fff;width:28rem;top:50%;left:50%;-webkit-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%);border-radius:.8rem}.dialog__footer,.dialog__header{height:5rem;font-size:1.6rem;line-height:5rem;text-align:center;position:relative}.dialog__header{font-size:1.8rem;color:#000}.dialog__footer:after{content:\"\";position:absolute;background-color:#ddd;left:0;height:1px;width:100%;-webkit-transform:scaleY(.5);-ms-transform:scaleY(.5);transform:scaleY(.5)}.dialog__footer:before{top:0}.dialog__body{padding:1.5rem;min-height:3rem;font-size:1.6rem;text-align:center}", ""]);
+exports.push([module.i, "*,:after,:before{-webkit-box-sizing:inherit;box-sizing:inherit}html{font-size:10px;height:100%;min-height:100%;max-width:750px;margin:0 auto;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-text-size-adjust:100%;-moz-text-size-adjust:100%;-ms-text-size-adjust:100%;text-size-adjust:100%;-webkit-tap-highlight-color:rgba(0, 0, 0, 0)}body{position:relative;background-color:#fff;color:#323232;font-family:STHeiti,Microsoft YaHei,Helvetica,Arial,sans-serif;margin:0;padding:0;-webkit-touch-callout:none;-webkit-font-smoothing:antialiased;-webkit-overflow-scrolling:touch;overflow-scrolling:touch;word-break:break-word}a:active,a:hover{outline:none}input:active,input:focus,textarea:active,textarea:focus{outline:none;-moz-outline-style:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0)}a{text-decoration:none}input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{-webkit-appearance:none!important;margin:0}input[type=number]{-moz-appearance:textfield}table{border-collapse:collapse;border-spacing:0}li,ol,ul{padding:0;margin:0;list-style:none;display:list-item;text-align:-webkit-match-parent}::-webkit-scrollbar{display:none}img{max-width:100%;height:auto;border:0;-webkit-touch-callout:none;-webkit-appearance:none;-moz-appearance:none;appearance:none}h1,h2,h3,h4,h5,h6,p{margin:0;font-weight:400}p{line-height:18px;border:0;outline:0;max-height:100%}input,select{vertical-align:middle}input,select,textarea{-webkit-appearance:none}::-moz-focus-inner{padding:0;border:0}article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section{display:block}blockquote,q{quotes:none}blockquote:after,blockquote:before,q:after,q:before{content:\"\";content:none}button{overflow:visible;cursor:pointer}.hidden{display:none!important;opacity:0!important}.clearfix:after{display:block;content:\"\";visibility:hidden;height:0;clear:both}.clearfix{zoom:1}.clear:after,.clear:before{*zoom:1;display:table;content:\"\";line-height:0}.clear:after{clear:both}.line-bottom:after,.line-top:before{content:\"\";position:absolute;background-color:#ddd;left:0;height:1px;width:100%;-webkit-transform:scaleY(.5);-ms-transform:scaleY(.5);transform:scaleY(.5)}.line-left:before,.line-right:after{content:\"\";position:absolute;background-color:#ddd;top:0;width:1px;height:100%;-webkit-transform:scaleX(.5);-ms-transform:scaleX(.5);transform:scaleX(.5)}.line-bottom:after{bottom:0}.line-top:before{top:0}.line-left:before{left:0}.line-right:after{right:0}.noscroll{overflow:hidden}mui-confirm-dialog{position:fixed;top:0;bottom:0;left:0;right:0;overflow:hidden;-ms-touch-action:manipulation;touch-action:manipulation}mui-confirm-dialog .dialog__mask{padding:0;margin:0;position:fixed;top:0;right:0;left:0;bottom:0;border:none;background-color:rgba(0, 0, 0, .4)}mui-confirm-dialog .dialog__wrapper{position:absolute;background-color:#fff;width:28rem;top:50%;left:50%;-webkit-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%);border-radius:.8rem}mui-confirm-dialog .confirm__message{font-size:1.8rem;padding:1.5rem;text-align:center}mui-confirm-dialog .dialog__footer{height:5rem;font-size:1.6rem;line-height:5rem;text-align:center;position:relative;display:-webkit-box;display:-ms-flexbox;display:-webkit-flex;display:flex}mui-confirm-dialog .dialog__footer:after{content:\"\";position:absolute;background-color:#ddd;left:0;height:1px;width:100%;-webkit-transform:scaleY(.5);-ms-transform:scaleY(.5);transform:scaleY(.5)}mui-confirm-dialog .dialog__footer:before{top:0}.dialog__footer .dialog__cancel,.dialog__footer .dialog__confirm{width:50%;-webkit-box-sizing:border-box;box-sizing:border-box;position:relative}.dialog__footer .dialog__cancel:after{content:\"\";position:absolute;background-color:#ddd;top:0;right:0;width:1px;height:100%;-webkit-transform:scaleX(.5);-ms-transform:scaleX(.5);transform:scaleX(.5)}.dialog__footer .dialog__confirm{color:#ff74b9}", ""]);
 
 // exports
 
 
 /***/ }),
 
-/***/ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/src/index.js!./examples/dialog/index.css":
-/*!***********************************************************************************************!*\
-  !*** ./node_modules/css-loader!./node_modules/postcss-loader/src!./examples/dialog/index.css ***!
-  \***********************************************************************************************/
+/***/ "./node_modules/css-loader/index.js!./node_modules/postcss-loader/src/index.js!./examples/confirm-dialog/index.css":
+/*!*******************************************************************************************************!*\
+  !*** ./node_modules/css-loader!./node_modules/postcss-loader/src!./examples/confirm-dialog/index.css ***!
+  \*******************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -8438,4 +8594,4 @@ module.exports = function (module) {
 /***/ })
 
 /******/ });
-//# sourceMappingURL=dialog.bundle.js.map
+//# sourceMappingURL=confirm-dialog.bundle.js.map

@@ -43,9 +43,9 @@ util.isInstance = (obj, instance) => {
 
 util.createElement = (IDSelector, options) => {
     const template = document.getElementById(IDSelector).content;
-    util.setAttrOptions(template, options);
+    util.setAttrOptions(template, options.conf || {});
     const cloneTemplate = document.importNode(template, true);
-    document.body.appendChild(cloneTemplate)
+    return cloneTemplate
 };
 
 util.setAttrOptions = (template, options) => {
@@ -126,5 +126,41 @@ util.getClosest = function (elem, selector) {
     return null;
 
 };
+
+util.colorLog = function (text, color) {
+    console.log(`%c ${text}`, `background: #222; color: ${color ? color: '#bada55'}`);
+};
+
+// 清除attr的方法，配置参数通过conf- 传递进来，所以创建完成后要通过此方法移除
+util.clearConfAttr = function () {
+    const confAttrs = [];
+    const attrs = this.attributes;
+
+    for(let i=0; i < this.attributes.length; i++){
+        let attrNAme = attrs[i].name;
+        if(attrNAme.indexOf('conf-') > -1){
+            confAttrs.push(attrNAme)
+        }
+    }
+
+    confAttrs.forEach(item => {
+        this.removeAttribute(item)
+    })
+
+};
+
+util.getConfAttr = function () {
+    const conf = {};
+    const attrs = this.attributes;
+
+    for(let i=0; i < this.attributes.length; i++){
+        let attrNAme = attrs[i].name;
+        if(attrNAme.indexOf('conf-') > -1){
+            conf[attrNAme.replace('conf-', '')] = attrs[i].value
+        }
+    }
+
+    return conf;
+}
 
 export default util;

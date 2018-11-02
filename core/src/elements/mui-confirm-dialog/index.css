@@ -1,6 +1,6 @@
 @import url("../../../css/common.css");
 
-mui-dialog{
+mui-confirm-dialog{
     position: fixed;
     top: 0;
     bottom: 0;
@@ -10,7 +10,7 @@ mui-dialog{
     touch-action: manipulation;
 }
 
-mui-dialog .dialog__mask{
+mui-confirm-dialog .dialog__mask{
     padding: 0;
     margin: 0;
     position: fixed;
@@ -22,7 +22,7 @@ mui-dialog .dialog__mask{
     background-color: var(--masker-bg-color);
 }
 
-mui-dialog .dialog__wrapper{
+mui-confirm-dialog .dialog__wrapper{
     position: absolute;
     background-color: #fff;
     width: 28rem;
@@ -32,20 +32,23 @@ mui-dialog .dialog__wrapper{
     border-radius: 0.8rem;
 }
 
-mui-dialog .dialog__header, mui-dialog .dialog__footer {
+
+mui-confirm-dialog .confirm__message{
+    font-size: 1.8rem;
+    padding: var(--content-padding);
+    text-align: center;
+}
+
+mui-confirm-dialog .dialog__footer {
     height: 5rem;
     font-size: var(--text-font-size);
     line-height: 5rem;
     text-align: center;
     position: relative;
+    display: flex;
 }
 
-mui-dialog .dialog__header {
-    font-size: 1.8rem;
-    color: #000;
-}
-
-mui-dialog .dialog__footer::after {
+mui-confirm-dialog .dialog__footer::after {
     content: "";
     position: absolute;
     background-color: #ddd;
@@ -56,13 +59,28 @@ mui-dialog .dialog__footer::after {
     transform: scaleY(0.5);
 }
 
-mui-dialog .dialog__footer::before {
+mui-confirm-dialog .dialog__footer::before {
     top: 0;
 }
 
-mui-dialog .dialog__body{
-    padding: 1.5rem;
-    min-height: 3rem;
-    font-size: var(--text-font-size);
-    text-align: center;
+.dialog__footer .dialog__cancel, .dialog__footer .dialog__confirm{
+    width: 50%;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.dialog__footer .dialog__cancel::after{
+    content: "";
+    position: absolute;
+    background-color: #ddd;
+    top: 0;
+    right: 0;
+    width: 1px;
+    height: 100%;
+    -webkit-transform: scaleX(0.5);
+    transform: scaleX(0.5);
+}
+
+.dialog__footer .dialog__confirm{
+    color: var(--theme-color);
 }

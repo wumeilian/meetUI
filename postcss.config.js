@@ -14,6 +14,10 @@ module.exports = {
             }
         },
 
+        // 支持nest
+        'postcss-nesting': {
+        },
+
         // 支持加前缀
         'autoprefixer': {
             "browsers": [

@@ -1,0 +1,6 @@
+:root{
+    --theme-color: #ff74b9;                 /** 主题色 **/
+    --text-font-size: 1.6rem;               /** 默认文字大小 **/
+    --masker-bg-color: rgba(0, 0, 0, .4);   /** 遮罩的背景色 **/
+    --content-padding: 1.5rem;              /** 默认的padding **/
+}

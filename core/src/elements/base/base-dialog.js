@@ -1,4 +1,5 @@
 import BaseElement from './base-element';
+import util from '../../common/libs/util';
 
 export default class BaseDialogElement extends BaseElement{
 
@@ -44,7 +45,11 @@ export default class BaseDialogElement extends BaseElement{
 
     // life-cycle 首次插入到DOM时调用
     connectedCallback(){
-        console.log('connectedCallback，life-cycle 首次插入到DOM');
+        util.colorLog('connectedCallback，life-cycle 首次插入到DOM');
+
+        // 移除所有attr
+        util.clearConfAttr.call(this);
+
         if(this._mask){
             this._mask.addEventListener('click', this._cancel)
         }
@@ -52,7 +57,7 @@ export default class BaseDialogElement extends BaseElement{
 
     // life-cycle 属性变化时
     attributeChangedCallback(){
-        console.log('attributeChangedCallback, life-cycle 属性变化时');
+        util.colorLog('attributeChangedCallback, life-cycle 属性变化时');
     }
 
     // life-cycle 被移除时

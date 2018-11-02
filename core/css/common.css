@@ -1,6 +1,4 @@
-:root{
-     --text-font-size: 1.6rem
- }
+@import "./variable.css";
 
 @charset "utf-8";
 

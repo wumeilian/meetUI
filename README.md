@@ -46,6 +46,14 @@ features
         dialog2.show();
     });
 
+    dialog2.confirm = function () {
+        console.log('点了确定');
+    };
+
+    dialog2.unConfirm = function () {
+        console.log('点了取消');
+    };
+
 ```
 
 ## develop

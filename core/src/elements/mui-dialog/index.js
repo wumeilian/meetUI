@@ -1,6 +1,10 @@
 import './index.css';
 import BaseDialogElement from '../base/base-dialog';
-import utils from '../../common/libs/utils'
+import util from '../../common/libs/util'
+
+const scheme = {
+    scrollContainer: '.dialog__container'
+};
 
 export default class DialogElement extends BaseDialogElement{
 
@@ -11,11 +15,11 @@ export default class DialogElement extends BaseDialogElement{
     }
 
     get _mask() {
-        return utils.findChild(this, '.dialog__mask');
+        return util.findChild(this, '.dialog__mask');
     }
 
     get _dialog() {
-        return utils.findChild(this, '.dialog__wrapper')
+        return util.findChild(this, '.dialog__wrapper')
     }
 
     _compile(){
@@ -36,7 +40,7 @@ export default class DialogElement extends BaseDialogElement{
 
         // 创建一个fragment暂时存放mui-dialog中的所有子元素
         const content = document.createDocumentFragment();
-        while (this.firstChild){
+        while (this.firstChild) {
             content.appendChild(this.firstChild);
         }
 
@@ -44,20 +48,25 @@ export default class DialogElement extends BaseDialogElement{
         const mask = document.createElement('div');
         mask.classList.add('dialog__mask');
 
-        const wrapper = document.createElement('div')
+        const wrapper = document.createElement('div');
         wrapper.classList.add('dialog__wrapper');
 
-        const container = document.createElement('div')
+        const container = document.createElement('div');
         container.classList.add('dialog__container');
         wrapper.appendChild(container);
 
         this.appendChild(mask);
         this.appendChild(wrapper);
-        // container中放入自定义子元素片段
-        this._dialog.children[0].append(content)
 
+        // container中放入自定义子元素片段
+        this._dialog.children[0].append(content);
         this._mask.style.zIndex = 20000;
         this._dialog.style.zIndex = 20001;
+
+        // 设置的可滚动区域
+        const scAttr = this.attributes['conf-scrollSelector'];
+        const scrollSelector = scAttr? scAttr.value : scheme.scrollContainer;
+        util.elementOutSidePreventScroll(this, scrollSelector)
     }
 }
 

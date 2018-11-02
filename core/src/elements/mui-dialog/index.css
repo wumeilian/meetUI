@@ -1,7 +1,7 @@
-@import url("../../../css/base.css");
+@import url("../../../css/common.css");
 
 mui-dialog{
-    position: absolute;
+    position: fixed;
     top: 0;
     bottom: 0;
     left: 0;
@@ -13,7 +13,7 @@ mui-dialog{
 .dialog__mask{
     padding: 0;
     margin: 0;
-    position: absolute;
+    position: fixed;
     top: 0;
     right: 0;
     left: 0;
@@ -36,18 +36,29 @@ mui-dialog{
     height: 4.4rem;
     font-size: var(--text-font-size);
     line-height: 4.4rem;
-    text-align: center
+    text-align: center;
+    position: relative;
 }
 
-.dialog__header {
-    box-sizing: border-box;
+.dialog__header::before,
+.dialog__footer::after {
+    content: "";
+    position: absolute;
+    background-color: #ddd;
+    left: 0;
+    height: 1px;
+    width: 100%;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
 }
 
-.dialog__footer {
-    border-top: 1px solid #ddd;
-    box-sizing: border-box;
+.dialog__header::before {
+    bottom: 0;
 }
 
+.dialog__footer::before {
+    top: 0;
+}
 
 .dialog__body{
     padding: 1.5rem;

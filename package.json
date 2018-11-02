@@ -36,6 +36,7 @@
     "css-loader": "^1.0.0",
     "cssnano": "^4.1.7",
     "cssnext": "^1.8.4",
+    "eruda": "^1.5.4",
     "express": "^4.16.4",
     "gulp": "^3.9.1",
     "gulp-babel": "^8.0.0",

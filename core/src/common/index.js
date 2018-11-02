@@ -1,4 +1,4 @@
-import util from './libs/utils'
+import util from './libs/util'
 
 const mui = {
     util

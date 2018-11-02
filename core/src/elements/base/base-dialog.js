@@ -16,17 +16,30 @@ export default class BaseDialogElement extends BaseElement{
         this._toggleStyle(shouldShow)
     }
 
+    // 是否html noscroll
+    _setNoScroll(isNoScroll){
+        if(isNoScroll){
+            document.querySelector('html').classList.add('noscroll')
+        }
+        else {
+            document.querySelector('html').classList.remove('noscroll')
+        }
+    }
+
     _cancel() {
         console.log('点击了cancel');
         this._setVisible(false)
+        this._setNoScroll(false);
     }
 
     show() {
-        this._setVisible(true)
+        this._setVisible(true);
+        this._setNoScroll(true);
     }
 
     hide() {
-        this._setVisible(false)
+        this._setVisible(false);
+        this._setNoScroll(false);
     }
 
     // life-cycle 首次插入到DOM时调用

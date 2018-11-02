@@ -855,6 +855,7 @@ __webpack_require__.r(__webpack_exports__);
 eruda__WEBPACK_IMPORTED_MODULE_4___default.a.init();
 
 // 创建dialog
+// 方式一
 _core_src_index_esm__WEBPACK_IMPORTED_MODULE_2__["default"].createElement('confirm-dialog.html', {
     conf: {
         message: '这里是显示的message信息',
@@ -864,13 +865,15 @@ _core_src_index_esm__WEBPACK_IMPORTED_MODULE_2__["default"].createElement('confi
 });
 
 var dialog = document.getElementById('my-dialog'),
-    dialog2 = document.getElementById('my-dialog2'),
-    showBtnEl = document.querySelector('#btn1'),
-    showBtnEl2 = document.querySelector('#btn2');
+    showBtnEl = document.querySelector('#btn1');
 
 showBtnEl.addEventListener('click', function () {
     dialog.show();
 });
+
+// 方式二
+var dialog2 = document.getElementById('my-dialog2'),
+    showBtnEl2 = document.querySelector('#btn2');
 
 showBtnEl2.addEventListener('click', function () {
     dialog2.show();

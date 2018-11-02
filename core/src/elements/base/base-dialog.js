@@ -14,7 +14,12 @@ export default class BaseDialogElement extends BaseElement{
     }
 
     _setVisible(shouldShow){
-        this._toggleStyle(shouldShow)
+        const action = shouldShow ? 'show' : 'hide';
+        // 开/关前的hook，等动画加上以后有用
+        util.triggerElementEvent(this, `pre${action}`, {});
+        this._toggleStyle(shouldShow);
+        // 开/关前的hook
+        util.triggerElementEvent(this, `post${action}`, {});
     }
 
     // 是否html noscroll

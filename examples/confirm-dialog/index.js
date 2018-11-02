@@ -38,3 +38,19 @@ dialog2.confirm = function () {
 dialog2.unConfirm = function () {
     console.log('点了取消');
 };
+
+dialog2.addEventListener('preshow', function (e) {
+    console.log('preshow', e);
+});
+
+dialog2.addEventListener('postshow', function (e) {
+    console.log('postshow', e);
+});
+
+dialog2.addEventListener('prehide', function (e) {
+    console.log('prehide', e);
+})
+
+dialog2.addEventListener('posthide', function (e) {
+    console.log('posthide', e);
+})

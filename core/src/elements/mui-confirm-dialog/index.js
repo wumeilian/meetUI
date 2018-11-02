@@ -89,7 +89,6 @@ export default class ConfirmDialogElement extends BaseDialogElement{
 
         // 监听confirm按钮点击事件
         this._confirmEl.addEventListener('click', () => {
-            console.log(this);
             if(this.confirm && isType(this.confirm, 'function')){
                 this.confirm()
             }

@@ -490,7 +490,12 @@ var BaseDialogElement = function (_BaseElement) {
     }, {
         key: '_setVisible',
         value: function _setVisible(shouldShow) {
+            var action = shouldShow ? 'show' : 'hide';
+            // 开/关前的hook，等动画加上以后有用
+            _common_libs_util__WEBPACK_IMPORTED_MODULE_1__["default"].triggerElementEvent(this, 'pre' + action, {});
             this._toggleStyle(shouldShow);
+            // 开/关前的hook
+            _common_libs_util__WEBPACK_IMPORTED_MODULE_1__["default"].triggerElementEvent(this, 'post' + action, {});
         }
 
         // 是否html noscroll
@@ -729,7 +734,6 @@ var ConfirmDialogElement = function (_BaseDialogElement) {
 
             // 监听confirm按钮点击事件
             this._confirmEl.addEventListener('click', function () {
-                console.log(_this2);
                 if (_this2.confirm && Object(_common_libs_commonUtils__WEBPACK_IMPORTED_MODULE_3__["isType"])(_this2.confirm, 'function')) {
                     _this2.confirm();
                 }
@@ -935,6 +939,22 @@ dialog2.confirm = function () {
 dialog2.unConfirm = function () {
     console.log('点了取消');
 };
+
+dialog2.addEventListener('preshow', function (e) {
+    console.log('preshow', e);
+});
+
+dialog2.addEventListener('postshow', function (e) {
+    console.log('postshow', e);
+});
+
+dialog2.addEventListener('prehide', function (e) {
+    console.log('prehide', e);
+});
+
+dialog2.addEventListener('posthide', function (e) {
+    console.log('posthide', e);
+});
 
 /***/ }),
 

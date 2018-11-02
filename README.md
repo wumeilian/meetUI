@@ -2,9 +2,9 @@
 A pure JavaScript UI framework for mobile !
 
 features
-(1) web component
-(2) css component
-(3) easy to use
+-(1) web component
+-(2) easy to use
+-(3) friendly for mobile
 
 ## use
 ```html

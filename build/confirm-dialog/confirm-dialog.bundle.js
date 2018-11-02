@@ -416,6 +416,31 @@ util.getConfAttr = function () {
     return conf;
 };
 
+/**
+ * @param {Element} element
+ * @param {String} eventName
+ * @param {Object} [detail]
+ * @return {CustomEvent}
+ */
+util.triggerElementEvent = function (target, eventName) {
+    var detail = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
+
+    var event = new CustomEvent(eventName, {
+        bubbles: true,
+        cancelable: true,
+        detail: detail
+    });
+
+    Object.keys(detail).forEach(function (key) {
+        event[key] = detail[key];
+    });
+
+    target.dispatchEvent(event);
+
+    return event;
+};
+
 /* harmony default export */ __webpack_exports__["default"] = (util);
 
 /***/ }),
@@ -652,12 +677,20 @@ var ConfirmDialogElement = function (_BaseDialogElement) {
         var _this = _possibleConstructorReturn(this, (ConfirmDialogElement.__proto__ || Object.getPrototypeOf(ConfirmDialogElement)).call(this));
 
         _this._compile();
+        _this._triggerEvent = _this._triggerEvent.bind(_this);
         return _this;
     }
 
     _createClass(ConfirmDialogElement, [{
+        key: '_triggerEvent',
+        value: function _triggerEvent(eventName, detail) {
+            _common_libs_util__WEBPACK_IMPORTED_MODULE_2__["default"].triggerElementEvent(this, eventName, detail);
+        }
+    }, {
         key: '_compile',
         value: function _compile() {
+            var _this2 = this;
+
             this.style.display = 'none';
             this.style.zIndex = 10001;
 
@@ -693,6 +726,22 @@ var ConfirmDialogElement = function (_BaseDialogElement) {
 
             this._mask.style.zIndex = 20000;
             this._dialog.style.zIndex = 20001;
+
+            // 监听confirm按钮点击事件
+            this._confirmEl.addEventListener('click', function () {
+                console.log(_this2);
+                if (_this2.confirm && Object(_common_libs_commonUtils__WEBPACK_IMPORTED_MODULE_3__["isType"])(_this2.confirm, 'function')) {
+                    _this2.confirm();
+                }
+                _this2._setVisible(false);
+            });
+            // 监听取消按钮点击事件
+            this._cancelEl.addEventListener('click', function () {
+                if (_this2.unConfirm && Object(_common_libs_commonUtils__WEBPACK_IMPORTED_MODULE_3__["isType"])(_this2.unConfirm, 'function')) {
+                    _this2.unConfirm();
+                }
+                _this2._setVisible(false);
+            });
         }
     }, {
         key: '_mask',
@@ -705,14 +754,14 @@ var ConfirmDialogElement = function (_BaseDialogElement) {
             return _common_libs_util__WEBPACK_IMPORTED_MODULE_2__["default"].findChild(this, '.dialog__wrapper');
         }
     }, {
-        key: '_unsure',
+        key: '_cancelEl',
         get: function get() {
-            return _common_libs_util__WEBPACK_IMPORTED_MODULE_2__["default"].findChild(this, '.dialog__cancel');
+            return this.querySelector('.dialog__cancel');
         }
     }, {
-        key: '_ensure',
+        key: '_confirmEl',
         get: function get() {
-            return _common_libs_util__WEBPACK_IMPORTED_MODULE_2__["default"].findChild(this, '.dialog__confirm');
+            return this.querySelector('.dialog__confirm');
         }
     }]);
 
@@ -878,6 +927,14 @@ var dialog2 = document.getElementById('my-dialog2'),
 showBtnEl2.addEventListener('click', function () {
     dialog2.show();
 });
+
+dialog2.confirm = function () {
+    console.log('点了确定');
+};
+
+dialog2.unConfirm = function () {
+    console.log('点了取消');
+};
 
 /***/ }),
 

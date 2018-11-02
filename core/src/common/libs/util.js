@@ -163,4 +163,27 @@ util.getConfAttr = function () {
     return conf;
 }
 
+/**
+ * @param {Element} element
+ * @param {String} eventName
+ * @param {Object} [detail]
+ * @return {CustomEvent}
+ */
+util.triggerElementEvent = (target, eventName, detail = {}) => {
+
+    const event = new CustomEvent(eventName, {
+        bubbles: true,
+        cancelable: true,
+        detail: detail
+    });
+
+    Object.keys(detail).forEach(key => {
+        event[key] = detail[key];
+    });
+
+    target.dispatchEvent(event);
+
+    return event;
+};
+
 export default util;

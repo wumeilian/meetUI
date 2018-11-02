@@ -30,3 +30,11 @@ var dialog2 = document.getElementById('my-dialog2'),
 showBtnEl2.addEventListener('click', function() {
     dialog2.show();
 });
+
+dialog2.confirm = function () {
+    console.log('点了确定');
+};
+
+dialog2.unConfirm = function () {
+    console.log('点了取消');
+};

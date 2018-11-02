@@ -1,7 +1,7 @@
 import './index.css';
 import BaseDialogElement from '../base/base-dialog';
 import util from '../../common/libs/util';
-import { merge } from '../../common/libs/commonUtils';
+import { merge, isType } from '../../common/libs/commonUtils';
 
 const textObj = {
     message: '这里是一条信息',
@@ -15,6 +15,7 @@ export default class ConfirmDialogElement extends BaseDialogElement{
         super();
 
         this._compile();
+        this._triggerEvent = this._triggerEvent.bind(this);
     }
 
     get _mask() {
@@ -25,12 +26,17 @@ export default class ConfirmDialogElement extends BaseDialogElement{
         return util.findChild(this, '.dialog__wrapper')
     }
 
-    get _unsure(){
-        return util.findChild(this, '.dialog__cancel');
+    get _cancelEl(){
+        return this.querySelector('.dialog__cancel');
     }
     
-    get _ensure(){
-        return util.findChild(this, '.dialog__confirm');
+    get _confirmEl(){
+        return this.querySelector('.dialog__confirm');
+    }
+
+
+    _triggerEvent(eventName, detail){
+        util.triggerElementEvent(this, eventName, detail);
     }
     
     _compile(){
@@ -80,6 +86,23 @@ export default class ConfirmDialogElement extends BaseDialogElement{
 
         this._mask.style.zIndex = 20000;
         this._dialog.style.zIndex = 20001;
+
+        // 监听confirm按钮点击事件
+        this._confirmEl.addEventListener('click', () => {
+            console.log(this);
+            if(this.confirm && isType(this.confirm, 'function')){
+                this.confirm()
+            }
+            this._setVisible(false);
+        });
+        // 监听取消按钮点击事件
+        this._cancelEl.addEventListener('click', () => {
+            if(this.unConfirm && isType(this.unConfirm, 'function')){
+                this.unConfirm()
+            }
+            this._setVisible(false);
+        })
+        
     }
 }
 

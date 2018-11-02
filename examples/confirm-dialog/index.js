@@ -39,6 +39,7 @@ dialog2.unConfirm = function () {
     console.log('点了取消');
 };
 
+// hook，组件有异步请求或动画时有用
 dialog2.addEventListener('preshow', function (e) {
     console.log('preshow', e);
 });
@@ -49,8 +50,8 @@ dialog2.addEventListener('postshow', function (e) {
 
 dialog2.addEventListener('prehide', function (e) {
     console.log('prehide', e);
-})
+});
 
 dialog2.addEventListener('posthide', function (e) {
     console.log('posthide', e);
-})
+});

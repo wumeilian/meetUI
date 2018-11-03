@@ -94,6 +94,7 @@ export default class ConfirmDialogElement extends BaseDialogElement{
             }
             this._setVisible(false);
         });
+
         // 监听取消按钮点击事件
         this._cancelEl.addEventListener('click', () => {
             if(this.unConfirm && isType(this.unConfirm, 'function')){

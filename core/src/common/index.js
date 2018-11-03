@@ -1,7 +1,9 @@
 import util from './libs/util'
+import platform from './libs/platform'
 
 const mui = {
-    util
+    util,
+    platform
 };
 
 mui.createElement = function (selector, options = {}) {

@@ -72,6 +72,8 @@ export default class BaseDialogElement extends BaseElement{
         // 移除所有attr
         util.clearConfAttr.call(this);
 
+        console.log(this._mask);
+
         if(this._mask){
             this._mask.addEventListener('click', this._cancel)
         }

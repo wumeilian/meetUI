@@ -1,0 +1,18 @@
+html,body{
+    height: 100%;
+    margin: 0;
+    overflow: auto;
+}
+
+body{
+    padding: 1.5rem;
+}
+
+mui-popup {
+    display: none;
+}
+
+mui-popup p{
+    line-height: 3.2rem;
+    font-size: 1.6rem;
+}

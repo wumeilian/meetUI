@@ -11,19 +11,20 @@ module.exports = {
         'postcss-cssnext': {
             features: {
                 rem: false // 禁止rem转px
-            }
+            },
+            browsers: [
+                "last 4 versions",
+                "iOS >= 8"
+            ]
         },
 
         // 支持nest
         'postcss-nesting': {
         },
 
-        // 支持加前缀
-        'autoprefixer': {
-            "browsers": [
-                "last 4 versions",
-                "iOS >= 8"
-            ]
-        }
+        // 支持calc
+        'postcss-calc': {
+        },
+
     }
 }

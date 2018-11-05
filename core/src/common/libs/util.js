@@ -42,9 +42,12 @@ util.isInstance = (obj, instance) => {
 };
 
 util.createElement = (IDSelector, options) => {
+    console.log('document.getElementById(IDSelector)',document.getElementById(IDSelector));
     const template = document.getElementById(IDSelector).content;
+    console.log('template',template);
     util.setAttrOptions(template, options.conf || {});
     const cloneTemplate = document.importNode(template, true);
+    console.log('cloneTemplate',cloneTemplate);
     return cloneTemplate
 };
 

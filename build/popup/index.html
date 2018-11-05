@@ -19,7 +19,8 @@
 </head>
 <body>
 
-    <button id="btn">按钮</button>
+    <button id="btn">方式一</button>
+    <button id="btn2">方式二</button>
 
     <mui-popup conf-header="自定义标题" id="my-popup">
         <p>
@@ -41,6 +42,12 @@
             2.若已记录用户union ID，则直接进入对应身份页面即可
         </p>
     </mui-popup>
+
+    <template id="popup.html">
+        <mui-popup id="my-popup2">
+            <a href="http://www.meiyou.com">www.meiyou.com</a>
+        </mui-popup>
+    </template>
 
 <script type="text/javascript" src="/popup/popup.bundle.js"></script></body>
 </html>

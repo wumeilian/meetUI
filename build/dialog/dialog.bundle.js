@@ -126,10 +126,13 @@ if(false) {}
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _libs_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./libs/util */ "./core/src/common/libs/util.js");
+/* harmony import */ var _libs_platform__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./libs/platform */ "./core/src/common/libs/platform.js");
+
 
 
 var mui = {
-    util: _libs_util__WEBPACK_IMPORTED_MODULE_0__["default"]
+    util: _libs_util__WEBPACK_IMPORTED_MODULE_0__["default"],
+    platform: _libs_platform__WEBPACK_IMPORTED_MODULE_1__["default"]
 };
 
 mui.createElement = function (selector) {
@@ -138,11 +141,267 @@ mui.createElement = function (selector) {
     var element = _libs_util__WEBPACK_IMPORTED_MODULE_0__["default"].createElement(selector, options);
     var target = options.append && options.append instanceof HTMLElement ? options.append : document.body;
 
+    console.log(element);
+
     target.insertBefore(element, options.insertBefore || null);
     return element;
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (mui);
+
+/***/ }),
+
+/***/ "./core/src/common/libs/animator.js":
+/*!******************************************!*\
+  !*** ./core/src/common/libs/animator.js ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./util */ "./core/src/common/libs/util.js");
+/* harmony import */ var _commonUtils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./commonUtils */ "./core/src/common/libs/commonUtils.js");
+
+
+
+var Animator = function Animator() {
+    this.pfx = ["webkitAnimationEnd", "animationend"];
+};
+
+Animator.prototype.startElAnimate = function (el, style) {
+    if (el.classList.contains(style)) {
+        return;
+    }
+    el.classList.add(style);
+};
+
+Animator.prototype.animate = function (animateData, callback) {
+    var _this = this;
+
+    // 如果不存在、不是数组、数组长度未0 则返回
+    if (!animateData) {
+        return;
+    }
+
+    var animateObjArray = [];
+
+    if (Object(_commonUtils__WEBPACK_IMPORTED_MODULE_1__["isType"])(animateData, 'object')) {
+        animateObjArray.push(animateData);
+    } else {
+        animateObjArray = animateData;
+    }
+
+    this.fixAnimateData(animateObjArray);
+
+    // 遍历各元素，增加动画
+    animateObjArray.forEach(function (item) {
+        var element = item.el;
+        _this.startElAnimate(element, item.style);
+        if (item.animateHookEnable) {
+            _this.transitionEnd(element, animateObjArray, callback);
+        }
+    });
+};
+
+Animator.prototype.transitionEnd = function (element, animateData, callback) {
+    if (!element) {
+        return function () {};
+    }
+    var fn = function fn(event) {
+        animateData.forEach(function (item) {
+            item.el.classList.remove(item.style);
+        });
+
+        if (element == event.target) {
+            event.stopPropagation();
+            removeListeners();
+
+            callback();
+        }
+    };
+
+    var removeListeners = function removeListeners() {
+        _util__WEBPACK_IMPORTED_MODULE_0__["default"]._transitionEndEvents.forEach(function (eventName) {
+            element.removeEventListener(eventName, fn, false);
+        });
+    };
+
+    _util__WEBPACK_IMPORTED_MODULE_0__["default"]._transitionEndEvents.forEach(function (eventName) {
+        element.addEventListener(eventName, fn, false);
+    });
+};
+
+// 如果没有指定hook，默认第一个
+Animator.prototype.fixAnimateData = function (animateData) {
+
+    // 寻找出需要作为动画结束钩子的节点
+    var isSpecified = animateData.some(function (item) {
+        return item.animateHookEnable === true;
+    });
+
+    if (!isSpecified) {
+        animateData[0].animateHookEnable = true;
+    }
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (new Animator());
+
+/***/ }),
+
+/***/ "./core/src/common/libs/commonUtils.js":
+/*!*********************************************!*\
+  !*** ./core/src/common/libs/commonUtils.js ***!
+  \*********************************************/
+/*! exports provided: deepExtend, merge, isType */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "deepExtend", function() { return deepExtend; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "merge", function() { return merge; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isType", function() { return isType; });
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var deepExtend = function deepExtend(out) {
+    out = out || {};
+
+    for (var i = 1, len = arguments.length; i < len; ++i) {
+        var obj = arguments[i];
+
+        if (!obj) {
+            continue;
+        }
+
+        for (var key in obj) {
+            if (!obj.hasOwnProperty(key)) {
+                continue;
+            }
+
+            // based on https://javascriptweblog.wordpress.com/2011/08/08/fixing-the-javascript-typeof-operator/
+            if (Object.prototype.toString.call(obj[key]) === '[object Object]') {
+                out[key] = deepExtend(out[key], obj[key]);
+                continue;
+            }
+
+            out[key] = obj[key];
+        }
+    }
+
+    return out;
+};
+
+function merge() /* obj1, obj2, obj3, ... */{
+    var result = {};
+    function assignValue(val, key) {
+        if (_typeof(result[key]) === 'object' && (typeof val === 'undefined' ? 'undefined' : _typeof(val)) === 'object') {
+            result[key] = merge(result[key], val);
+        } else {
+            result[key] = val;
+        }
+    }
+
+    for (var i = 0, l = arguments.length; i < l; i++) {
+        forEach(arguments[i], assignValue);
+    }
+    return result;
+}
+
+function forEach(obj, fn) {
+    // Don't bother if no value provided
+    if (obj === null || typeof obj === 'undefined') {
+        return;
+    }
+
+    // Force an array if not already something iterable
+    if ((typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) !== 'object') {
+        /*eslint no-param-reassign:0*/
+        obj = [obj];
+    }
+
+    if (isType(obj, 'array')) {
+        // Iterate over array values
+        for (var i = 0, l = obj.length; i < l; i++) {
+            fn.call(null, obj[i], i, obj);
+        }
+    } else {
+        // Iterate over object keys
+        for (var key in obj) {
+            if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                fn.call(null, obj[key], key, obj);
+            }
+        }
+    }
+}
+
+var isType = function isType(obj, type) {
+    return Object.prototype.toString.call(obj).toLowerCase() === "[object " + type + "]";
+};
+
+
+
+/***/ }),
+
+/***/ "./core/src/common/libs/platform.js":
+/*!******************************************!*\
+  !*** ./core/src/common/libs/platform.js ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+function isMeetYouClient() {
+    return (/MeetYouClient/i.test(window.navigator.userAgent)
+    );
+}
+
+function isWeixinBrowser() {
+    return (/micromessenger/.test(navigator.userAgent.toLowerCase())
+    );
+}
+
+function weixinReady(callback) {
+    if (_typeof(window.WeixinJSBridge) == "object" && typeof window.WeixinJSBridge.invoke == "function") {
+        callback();
+    } else {
+        if (document.addEventListener) {
+            document.addEventListener("WeixinJSBridgeReady", callback, false);
+        } else if (document.attachEvent) {
+            document.attachEvent("WeixinJSBridgeReady", callback);
+            document.attachEvent("onWeixinJSBridgeReady", callback);
+        }
+    }
+}
+
+function isAndroid() {
+    return (/Android/.test(window.navigator.userAgent)
+    );
+}
+
+function isIOS() {
+    return (/iPhone|iPad|iPod/i.test(window.navigator.userAgent)
+    );
+}
+
+function isMobile() {
+    var check = false;
+    (function (a) {
+        if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4))) check = true;
+    })(navigator.userAgent || navigator.vendor || window.opera);
+    return check;
+}
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    isMeetYouClient: isMeetYouClient,
+    isWeixinBrowser: isWeixinBrowser,
+    weixinReady: weixinReady,
+    isAndroid: isAndroid,
+    isIOS: isIOS,
+    isMobile: isMobile
+});
 
 /***/ }),
 
@@ -203,9 +462,12 @@ util.isInstance = function (obj, instance) {
 };
 
 util.createElement = function (IDSelector, options) {
+    console.log('document.getElementById(IDSelector)', document.getElementById(IDSelector));
     var template = document.getElementById(IDSelector).content;
+    console.log('template', template);
     util.setAttrOptions(template, options.conf || {});
     var cloneTemplate = document.importNode(template, true);
+    console.log('cloneTemplate', cloneTemplate);
     return cloneTemplate;
 };
 
@@ -323,6 +585,35 @@ util.getConfAttr = function () {
     return conf;
 };
 
+/**
+ * @param {Element} element
+ * @param {String} eventName
+ * @param {Object} [detail]
+ * @return {CustomEvent}
+ */
+util.triggerElementEvent = function (target, eventName) {
+    var detail = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
+
+    var event = new CustomEvent(eventName, {
+        bubbles: true,
+        cancelable: true,
+        detail: detail
+    });
+
+    Object.keys(detail).forEach(function (key) {
+        event[key] = detail[key];
+    });
+
+    target.dispatchEvent(event);
+
+    return event;
+};
+
+util._transitionEndEvents = function () {
+    return ["webkitAnimationEnd", "animationend"];
+}();
+
 /* harmony default export */ __webpack_exports__["default"] = (util);
 
 /***/ }),
@@ -338,6 +629,7 @@ util.getConfAttr = function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _base_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./base-element */ "./core/src/elements/base/base-element.js");
 /* harmony import */ var _common_libs_util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../common/libs/util */ "./core/src/common/libs/util.js");
+/* harmony import */ var _common_libs_animator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../common/libs/animator */ "./core/src/common/libs/animator.js");
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -345,6 +637,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 
 
 
@@ -372,7 +665,37 @@ var BaseDialogElement = function (_BaseElement) {
     }, {
         key: '_setVisible',
         value: function _setVisible(shouldShow) {
-            this._toggleStyle(shouldShow);
+            var _this2 = this;
+
+            var action = shouldShow ? 'show' : 'hide';
+
+            // preshow/prehide事件
+            _common_libs_util__WEBPACK_IMPORTED_MODULE_1__["default"].triggerElementEvent(this, 'pre' + action, {});
+
+            if (action === 'show') {
+                if (!this._animateData) {
+                    _common_libs_util__WEBPACK_IMPORTED_MODULE_1__["default"].triggerElementEvent(this, 'post' + action, {});
+                    this._toggleStyle(shouldShow);
+                    return;
+                }
+                _common_libs_animator__WEBPACK_IMPORTED_MODULE_2__["default"].animate(this._animateData[action], function () {
+                    // postshow事件
+                    _common_libs_util__WEBPACK_IMPORTED_MODULE_1__["default"].triggerElementEvent(_this2, 'post' + action, {});
+                });
+
+                this._toggleStyle(shouldShow);
+            } else {
+                if (!this._animateData) {
+                    _common_libs_util__WEBPACK_IMPORTED_MODULE_1__["default"].triggerElementEvent(this, 'post' + action, {});
+                    this._toggleStyle(shouldShow);
+                    return;
+                }
+                _common_libs_animator__WEBPACK_IMPORTED_MODULE_2__["default"].animate(this._animateData[action], function () {
+                    _this2._toggleStyle(shouldShow);
+                    // posthide事件
+                    _common_libs_util__WEBPACK_IMPORTED_MODULE_1__["default"].triggerElementEvent(_this2, 'post' + action, {});
+                });
+            }
         }
 
         // 是否html noscroll
@@ -415,6 +738,8 @@ var BaseDialogElement = function (_BaseElement) {
 
             // 移除所有attr
             _common_libs_util__WEBPACK_IMPORTED_MODULE_1__["default"].clearConfAttr.call(this);
+
+            console.log(this._mask);
 
             if (this._mask) {
                 this._mask.addEventListener('click', this._cancel);
@@ -639,8 +964,12 @@ customElements.define('mui-dialog', DialogElement);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _polyfills_index__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./polyfills/index */ "./core/src/polyfills/index.js");
 /* harmony import */ var _common_index__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./common/index */ "./core/src/common/index.js");
+/* harmony import */ var _setup__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./setup */ "./core/src/setup.js");
 
 
+
+
+Object(_setup__WEBPACK_IMPORTED_MODULE_2__["default"])(_common_index__WEBPACK_IMPORTED_MODULE_1__["default"]);
 
 /* harmony default export */ __webpack_exports__["default"] = (_common_index__WEBPACK_IMPORTED_MODULE_1__["default"]);
 
@@ -701,6 +1030,33 @@ if (window.customElements) {
 
 /***/ }),
 
+/***/ "./core/src/setup.js":
+/*!***************************!*\
+  !*** ./core/src/setup.js ***!
+  \***************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return setup; });
+/* harmony import */ var fastclick__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! fastclick */ "./node_modules/fastclick/lib/fastclick.js");
+/* harmony import */ var fastclick__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(fastclick__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function setup(mui) {
+    window.addEventListener('load', function () {
+        mui.fastClick = fastclick__WEBPACK_IMPORTED_MODULE_0___default.a.attach(document.body);
+
+        // android的话不需要加fastclick
+        if (mui.platform.isAndroid()) {
+            mui.fastClick.destroy();
+        }
+    });
+}
+
+/***/ }),
+
 /***/ "./examples/dialog/index.css":
 /*!***********************************!*\
   !*** ./examples/dialog/index.css ***!
@@ -757,7 +1113,7 @@ __webpack_require__.r(__webpack_exports__);
 eruda__WEBPACK_IMPORTED_MODULE_4___default.a.init();
 
 // 创建dialog
-_core_src_index_esm__WEBPACK_IMPORTED_MODULE_2__["default"].createElement('confirm-dialog.html', { scrollSelector: '.dialog__body' });
+_core_src_index_esm__WEBPACK_IMPORTED_MODULE_2__["default"].createElement('dialog.html', { scrollSelector: '.dialog__body' });
 
 var dialog = document.getElementById('my-dialog'),
     showBtnEl = document.querySelector('#btn1'),
@@ -769,6 +1125,13 @@ showBtnEl.addEventListener('click', function () {
 
 closeEl.addEventListener('click', function () {
     dialog.hide();
+});
+
+var dialog2 = document.getElementById('my-dialog2');
+var btn2 = document.getElementById('btn2');
+
+btn2.addEventListener('click', function () {
+    dialog2.show();
 });
 
 /***/ }),
@@ -2801,7 +3164,7 @@ exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader
 
 
 // module
-exports.push([module.i, "*,:after,:before{-webkit-box-sizing:inherit;box-sizing:inherit}html{font-size:10px;height:100%;min-height:100%;max-width:750px;margin:0 auto;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-text-size-adjust:100%;-moz-text-size-adjust:100%;-ms-text-size-adjust:100%;text-size-adjust:100%;-webkit-tap-highlight-color:rgba(0, 0, 0, 0)}body{position:relative;background-color:#fff;color:#323232;font-family:STHeiti,Microsoft YaHei,Helvetica,Arial,sans-serif;margin:0;padding:0;-webkit-touch-callout:none;-webkit-font-smoothing:antialiased;-webkit-overflow-scrolling:touch;overflow-scrolling:touch;word-break:break-word}a:active,a:hover{outline:none}input:active,input:focus,textarea:active,textarea:focus{outline:none;-moz-outline-style:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0)}a{text-decoration:none}input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{-webkit-appearance:none!important;margin:0}input[type=number]{-moz-appearance:textfield}table{border-collapse:collapse;border-spacing:0}li,ol,ul{padding:0;margin:0;list-style:none;display:list-item;text-align:-webkit-match-parent}::-webkit-scrollbar{display:none}img{max-width:100%;height:auto;border:0;-webkit-touch-callout:none;-webkit-appearance:none;-moz-appearance:none;appearance:none}h1,h2,h3,h4,h5,h6,p{margin:0;font-weight:400}p{line-height:18px;border:0;outline:0;max-height:100%}input,select{vertical-align:middle}input,select,textarea{-webkit-appearance:none}::-moz-focus-inner{padding:0;border:0}article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section{display:block}blockquote,q{quotes:none}blockquote:after,blockquote:before,q:after,q:before{content:\"\";content:none}button{overflow:visible;cursor:pointer}.hidden{display:none!important;opacity:0!important}.clearfix:after{display:block;content:\"\";visibility:hidden;height:0;clear:both}.clearfix{zoom:1}.clear:after,.clear:before{*zoom:1;display:table;content:\"\";line-height:0}.clear:after{clear:both}.line-bottom:after,.line-top:before{content:\"\";position:absolute;background-color:#ddd;left:0;height:1px;width:100%;-webkit-transform:scaleY(.5);-ms-transform:scaleY(.5);transform:scaleY(.5)}.line-left:before,.line-right:after{content:\"\";position:absolute;background-color:#ddd;top:0;width:1px;height:100%;-webkit-transform:scaleX(.5);-ms-transform:scaleX(.5);transform:scaleX(.5)}.line-bottom:after{bottom:0}.line-top:before{top:0}.line-left:before{left:0}.line-right:after{right:0}.noscroll{overflow:hidden}", ""]);
+exports.push([module.i, "@-webkit-keyframes muiFadeIn{0%{opacity:0}to{opacity:1}}@keyframes muiFadeIn{0%{opacity:0}to{opacity:1}}@-webkit-keyframes muiZoomIn{0%{opacity:0;-webkit-transform:translate3d(-50%,-50%,0) scale3d(1.2,1.2,1);transform:translate3d(-50%,-50%,0) scale3d(1.2,1.2,1)}to{opacity:1;-webkit-transform:translate3d(-50%,-50%,0) scaleX(1);transform:translate3d(-50%,-50%,0) scaleX(1)}}@keyframes muiZoomIn{0%{opacity:0;-webkit-transform:translate3d(-50%,-50%,0) scale3d(1.2,1.2,1);transform:translate3d(-50%,-50%,0) scale3d(1.2,1.2,1)}to{opacity:1;-webkit-transform:translate3d(-50%,-50%,0) scaleX(1);transform:translate3d(-50%,-50%,0) scaleX(1)}}@-webkit-keyframes muiFadeOut{0%{opacity:1}to{opacity:0}}@keyframes muiFadeOut{0%{opacity:1}to{opacity:0}}@-webkit-keyframes muiBounceInUp{0%{-webkit-transform:translate3d(0,100%,0);transform:translate3d(0,100%,0)}to{-webkit-transform:translateY(0);transform:translateY(0)}}@keyframes muiBounceInUp{0%{-webkit-transform:translate3d(0,100%,0);transform:translate3d(0,100%,0)}to{-webkit-transform:translateY(0);transform:translateY(0)}}@-webkit-keyframes muiSlideOutDown{0%{-webkit-transform:translateZ(0);transform:translateZ(0)}to{-webkit-transform:translateY(100%);transform:translateY(100%)}}@keyframes muiSlideOutDown{0%{-webkit-transform:translateZ(0);transform:translateZ(0)}to{-webkit-transform:translateY(100%);transform:translateY(100%)}}*,:after,:before{-webkit-box-sizing:inherit;box-sizing:inherit}html{font-size:10px;height:100%;min-height:100%;max-width:750px;margin:0 auto;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-text-size-adjust:100%;-moz-text-size-adjust:100%;-ms-text-size-adjust:100%;text-size-adjust:100%;-webkit-tap-highlight-color:rgba(0, 0, 0, 0)}body{position:relative;background-color:#fff;color:#323232;font-family:STHeiti,Microsoft YaHei,Helvetica,Arial,sans-serif;margin:0;padding:0;-webkit-touch-callout:none;-webkit-font-smoothing:antialiased;-webkit-overflow-scrolling:touch;overflow-scrolling:touch;word-break:break-word}a:active,a:hover{outline:none}input:active,input:focus,textarea:active,textarea:focus{outline:none;-moz-outline-style:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0)}a{text-decoration:none}input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{-webkit-appearance:none!important;margin:0}input[type=number]{-moz-appearance:textfield}table{border-collapse:collapse;border-spacing:0}li,ol,ul{padding:0;margin:0;list-style:none;display:list-item;text-align:-webkit-match-parent}::-webkit-scrollbar{display:none}img{max-width:100%;height:auto;border:0;-webkit-touch-callout:none;-webkit-appearance:none;-moz-appearance:none;appearance:none}h1,h2,h3,h4,h5,h6,p{margin:0;font-weight:400}p{line-height:18px;border:0;outline:0;max-height:100%}input,select{vertical-align:middle}input,select,textarea{-webkit-appearance:none}::-moz-focus-inner{padding:0;border:0}article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section{display:block}blockquote,q{quotes:none}blockquote:after,blockquote:before,q:after,q:before{content:\"\";content:none}button{overflow:visible;cursor:pointer}.hidden{display:none!important;opacity:0!important}.clearfix:after{display:block;content:\"\";visibility:hidden;height:0;clear:both}.clearfix{zoom:1}.clear:after,.clear:before{*zoom:1;display:table;content:\"\";line-height:0}.clear:after{clear:both}.line-bottom:after,.line-top:before{content:\"\";position:absolute;background-color:#ddd;left:0;height:1px;width:100%;-webkit-transform:scaleY(.5);-ms-transform:scaleY(.5);transform:scaleY(.5)}.line-left:before,.line-right:after{content:\"\";position:absolute;background-color:#ddd;top:0;width:1px;height:100%;-webkit-transform:scaleX(.5);-ms-transform:scaleX(.5);transform:scaleX(.5)}.line-bottom:after{bottom:0}.line-top:before{top:0}.line-left:before{left:0}.line-right:after{right:0}.noscroll{overflow:hidden}", ""]);
 
 // exports
 
@@ -2820,7 +3183,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "*,:after,:before{-webkit-box-sizing:inherit;box-sizing:inherit}html{font-size:10px;height:100%;min-height:100%;max-width:750px;margin:0 auto;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-text-size-adjust:100%;-moz-text-size-adjust:100%;-ms-text-size-adjust:100%;text-size-adjust:100%;-webkit-tap-highlight-color:rgba(0, 0, 0, 0)}body{position:relative;background-color:#fff;color:#323232;font-family:STHeiti,Microsoft YaHei,Helvetica,Arial,sans-serif;margin:0;padding:0;-webkit-touch-callout:none;-webkit-font-smoothing:antialiased;-webkit-overflow-scrolling:touch;overflow-scrolling:touch;word-break:break-word}a:active,a:hover{outline:none}input:active,input:focus,textarea:active,textarea:focus{outline:none;-moz-outline-style:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0)}a{text-decoration:none}input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{-webkit-appearance:none!important;margin:0}input[type=number]{-moz-appearance:textfield}table{border-collapse:collapse;border-spacing:0}li,ol,ul{padding:0;margin:0;list-style:none;display:list-item;text-align:-webkit-match-parent}::-webkit-scrollbar{display:none}img{max-width:100%;height:auto;border:0;-webkit-touch-callout:none;-webkit-appearance:none;-moz-appearance:none;appearance:none}h1,h2,h3,h4,h5,h6,p{margin:0;font-weight:400}p{line-height:18px;border:0;outline:0;max-height:100%}input,select{vertical-align:middle}input,select,textarea{-webkit-appearance:none}::-moz-focus-inner{padding:0;border:0}article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section{display:block}blockquote,q{quotes:none}blockquote:after,blockquote:before,q:after,q:before{content:\"\";content:none}button{overflow:visible;cursor:pointer}.hidden{display:none!important;opacity:0!important}.clearfix:after{display:block;content:\"\";visibility:hidden;height:0;clear:both}.clearfix{zoom:1}.clear:after,.clear:before{*zoom:1;display:table;content:\"\";line-height:0}.clear:after{clear:both}.line-bottom:after,.line-top:before{content:\"\";position:absolute;background-color:#ddd;left:0;height:1px;width:100%;-webkit-transform:scaleY(.5);-ms-transform:scaleY(.5);transform:scaleY(.5)}.line-left:before,.line-right:after{content:\"\";position:absolute;background-color:#ddd;top:0;width:1px;height:100%;-webkit-transform:scaleX(.5);-ms-transform:scaleX(.5);transform:scaleX(.5)}.line-bottom:after{bottom:0}.line-top:before{top:0}.line-left:before{left:0}.line-right:after{right:0}.noscroll{overflow:hidden}mui-dialog{overflow:hidden;-ms-touch-action:manipulation;touch-action:manipulation}mui-dialog,mui-dialog .dialog__mask{position:fixed;top:0;bottom:0;left:0;right:0}mui-dialog .dialog__mask{padding:0;margin:0;border:none;background-color:rgba(0, 0, 0, .4)}mui-dialog .dialog__wrapper{position:absolute;background-color:#fff;width:28rem;top:50%;left:50%;-webkit-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%);border-radius:.8rem}mui-dialog .dialog__footer,mui-dialog .dialog__header{height:5rem;font-size:1.6rem;line-height:5rem;text-align:center;position:relative}mui-dialog .dialog__header{font-size:1.8rem;color:#000}mui-dialog .dialog__footer:after{content:\"\";position:absolute;background-color:#ddd;left:0;height:1px;width:100%;-webkit-transform:scaleY(.5);-ms-transform:scaleY(.5);transform:scaleY(.5)}mui-dialog .dialog__footer:before{top:0}mui-dialog .dialog__body{padding:1.5rem;min-height:3rem;font-size:1.6rem;text-align:center}", ""]);
+exports.push([module.i, "@-webkit-keyframes muiFadeIn{0%{opacity:0}to{opacity:1}}@keyframes muiFadeIn{0%{opacity:0}to{opacity:1}}@-webkit-keyframes muiZoomIn{0%{opacity:0;-webkit-transform:translate3d(-50%,-50%,0) scale3d(1.2,1.2,1);transform:translate3d(-50%,-50%,0) scale3d(1.2,1.2,1)}to{opacity:1;-webkit-transform:translate3d(-50%,-50%,0) scaleX(1);transform:translate3d(-50%,-50%,0) scaleX(1)}}@keyframes muiZoomIn{0%{opacity:0;-webkit-transform:translate3d(-50%,-50%,0) scale3d(1.2,1.2,1);transform:translate3d(-50%,-50%,0) scale3d(1.2,1.2,1)}to{opacity:1;-webkit-transform:translate3d(-50%,-50%,0) scaleX(1);transform:translate3d(-50%,-50%,0) scaleX(1)}}@-webkit-keyframes muiFadeOut{0%{opacity:1}to{opacity:0}}@keyframes muiFadeOut{0%{opacity:1}to{opacity:0}}@-webkit-keyframes muiBounceInUp{0%{-webkit-transform:translate3d(0,100%,0);transform:translate3d(0,100%,0)}to{-webkit-transform:translateY(0);transform:translateY(0)}}@keyframes muiBounceInUp{0%{-webkit-transform:translate3d(0,100%,0);transform:translate3d(0,100%,0)}to{-webkit-transform:translateY(0);transform:translateY(0)}}@-webkit-keyframes muiSlideOutDown{0%{-webkit-transform:translateZ(0);transform:translateZ(0)}to{-webkit-transform:translateY(100%);transform:translateY(100%)}}@keyframes muiSlideOutDown{0%{-webkit-transform:translateZ(0);transform:translateZ(0)}to{-webkit-transform:translateY(100%);transform:translateY(100%)}}*,:after,:before{-webkit-box-sizing:inherit;box-sizing:inherit}html{font-size:10px;height:100%;min-height:100%;max-width:750px;margin:0 auto;-webkit-box-sizing:border-box;box-sizing:border-box;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;-webkit-text-size-adjust:100%;-moz-text-size-adjust:100%;-ms-text-size-adjust:100%;text-size-adjust:100%;-webkit-tap-highlight-color:rgba(0, 0, 0, 0)}body{position:relative;background-color:#fff;color:#323232;font-family:STHeiti,Microsoft YaHei,Helvetica,Arial,sans-serif;margin:0;padding:0;-webkit-touch-callout:none;-webkit-font-smoothing:antialiased;-webkit-overflow-scrolling:touch;overflow-scrolling:touch;word-break:break-word}a:active,a:hover{outline:none}input:active,input:focus,textarea:active,textarea:focus{outline:none;-moz-outline-style:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0)}a{text-decoration:none}input::-webkit-inner-spin-button,input::-webkit-outer-spin-button{-webkit-appearance:none!important;margin:0}input[type=number]{-moz-appearance:textfield}table{border-collapse:collapse;border-spacing:0}li,ol,ul{padding:0;margin:0;list-style:none;display:list-item;text-align:-webkit-match-parent}::-webkit-scrollbar{display:none}img{max-width:100%;height:auto;border:0;-webkit-touch-callout:none;-webkit-appearance:none;-moz-appearance:none;appearance:none}h1,h2,h3,h4,h5,h6,p{margin:0;font-weight:400}p{line-height:18px;border:0;outline:0;max-height:100%}input,select{vertical-align:middle}input,select,textarea{-webkit-appearance:none}::-moz-focus-inner{padding:0;border:0}article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section{display:block}blockquote,q{quotes:none}blockquote:after,blockquote:before,q:after,q:before{content:\"\";content:none}button{overflow:visible;cursor:pointer}.hidden{display:none!important;opacity:0!important}.clearfix:after{display:block;content:\"\";visibility:hidden;height:0;clear:both}.clearfix{zoom:1}.clear:after,.clear:before{*zoom:1;display:table;content:\"\";line-height:0}.clear:after{clear:both}.line-bottom:after,.line-top:before{content:\"\";position:absolute;background-color:#ddd;left:0;height:1px;width:100%;-webkit-transform:scaleY(.5);-ms-transform:scaleY(.5);transform:scaleY(.5)}.line-left:before,.line-right:after{content:\"\";position:absolute;background-color:#ddd;top:0;width:1px;height:100%;-webkit-transform:scaleX(.5);-ms-transform:scaleX(.5);transform:scaleX(.5)}.line-bottom:after{bottom:0}.line-top:before{top:0}.line-left:before{left:0}.line-right:after{right:0}.noscroll{overflow:hidden}mui-dialog{overflow:hidden;-ms-touch-action:manipulation;touch-action:manipulation}mui-dialog,mui-dialog .dialog__mask{position:fixed;top:0;bottom:0;left:0;right:0}mui-dialog .dialog__mask{padding:0;margin:0;border:none;background-color:#000000;background-color:rgba(0, 0, 0, .4)}mui-dialog .dialog__wrapper{position:absolute;background-color:#fff;width:28rem;top:50%;left:50%;-webkit-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%);border-radius:.8rem}mui-dialog .dialog__footer,mui-dialog .dialog__header{height:5rem;font-size:1.6rem;line-height:5rem;text-align:center;position:relative}mui-dialog .dialog__header{font-size:1.8rem;color:#000}mui-dialog .dialog__footer:after{content:\"\";position:absolute;background-color:#ddd;left:0;height:1px;width:100%;-webkit-transform:scaleY(.5);-ms-transform:scaleY(.5);transform:scaleY(.5)}mui-dialog .dialog__footer:before{top:0}mui-dialog .dialog__body{padding:1.5rem;min-height:3rem;font-size:1.6rem;text-align:center}", ""]);
 
 // exports
 
@@ -7949,6 +8312,842 @@ exports.push([module.i,".eruda-container html,\n.eruda-container body,\n.eruda-c
 
 /***/ }),
 
+/***/ "./node_modules/fastclick/lib/fastclick.js":
+/*!*************************************************!*\
+  !*** ./node_modules/fastclick/lib/fastclick.js ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_RESULT__;var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+;(function () {
+	'use strict';
+
+	/**
+  * @preserve FastClick: polyfill to remove click delays on browsers with touch UIs.
+  *
+  * @codingstandard ftlabs-jsv2
+  * @copyright The Financial Times Limited [All Rights Reserved]
+  * @license MIT License (see LICENSE.txt)
+  */
+
+	/*jslint browser:true, node:true*/
+	/*global define, Event, Node*/
+
+	/**
+  * Instantiate fast-clicking listeners on the specified layer.
+  *
+  * @constructor
+  * @param {Element} layer The layer to listen on
+  * @param {Object} [options={}] The options to override the defaults
+  */
+
+	function FastClick(layer, options) {
+		var oldOnClick;
+
+		options = options || {};
+
+		/**
+   * Whether a click is currently being tracked.
+   *
+   * @type boolean
+   */
+		this.trackingClick = false;
+
+		/**
+   * Timestamp for when click tracking started.
+   *
+   * @type number
+   */
+		this.trackingClickStart = 0;
+
+		/**
+   * The element being tracked for a click.
+   *
+   * @type EventTarget
+   */
+		this.targetElement = null;
+
+		/**
+   * X-coordinate of touch start event.
+   *
+   * @type number
+   */
+		this.touchStartX = 0;
+
+		/**
+   * Y-coordinate of touch start event.
+   *
+   * @type number
+   */
+		this.touchStartY = 0;
+
+		/**
+   * ID of the last touch, retrieved from Touch.identifier.
+   *
+   * @type number
+   */
+		this.lastTouchIdentifier = 0;
+
+		/**
+   * Touchmove boundary, beyond which a click will be cancelled.
+   *
+   * @type number
+   */
+		this.touchBoundary = options.touchBoundary || 10;
+
+		/**
+   * The FastClick layer.
+   *
+   * @type Element
+   */
+		this.layer = layer;
+
+		/**
+   * The minimum time between tap(touchstart and touchend) events
+   *
+   * @type number
+   */
+		this.tapDelay = options.tapDelay || 200;
+
+		/**
+   * The maximum time for a tap
+   *
+   * @type number
+   */
+		this.tapTimeout = options.tapTimeout || 700;
+
+		if (FastClick.notNeeded(layer)) {
+			return;
+		}
+
+		// Some old versions of Android don't have Function.prototype.bind
+		function bind(method, context) {
+			return function () {
+				return method.apply(context, arguments);
+			};
+		}
+
+		var methods = ['onMouse', 'onClick', 'onTouchStart', 'onTouchMove', 'onTouchEnd', 'onTouchCancel'];
+		var context = this;
+		for (var i = 0, l = methods.length; i < l; i++) {
+			context[methods[i]] = bind(context[methods[i]], context);
+		}
+
+		// Set up event handlers as required
+		if (deviceIsAndroid) {
+			layer.addEventListener('mouseover', this.onMouse, true);
+			layer.addEventListener('mousedown', this.onMouse, true);
+			layer.addEventListener('mouseup', this.onMouse, true);
+		}
+
+		layer.addEventListener('click', this.onClick, true);
+		layer.addEventListener('touchstart', this.onTouchStart, false);
+		layer.addEventListener('touchmove', this.onTouchMove, false);
+		layer.addEventListener('touchend', this.onTouchEnd, false);
+		layer.addEventListener('touchcancel', this.onTouchCancel, false);
+
+		// Hack is required for browsers that don't support Event#stopImmediatePropagation (e.g. Android 2)
+		// which is how FastClick normally stops click events bubbling to callbacks registered on the FastClick
+		// layer when they are cancelled.
+		if (!Event.prototype.stopImmediatePropagation) {
+			layer.removeEventListener = function (type, callback, capture) {
+				var rmv = Node.prototype.removeEventListener;
+				if (type === 'click') {
+					rmv.call(layer, type, callback.hijacked || callback, capture);
+				} else {
+					rmv.call(layer, type, callback, capture);
+				}
+			};
+
+			layer.addEventListener = function (type, callback, capture) {
+				var adv = Node.prototype.addEventListener;
+				if (type === 'click') {
+					adv.call(layer, type, callback.hijacked || (callback.hijacked = function (event) {
+						if (!event.propagationStopped) {
+							callback(event);
+						}
+					}), capture);
+				} else {
+					adv.call(layer, type, callback, capture);
+				}
+			};
+		}
+
+		// If a handler is already declared in the element's onclick attribute, it will be fired before
+		// FastClick's onClick handler. Fix this by pulling out the user-defined handler function and
+		// adding it as listener.
+		if (typeof layer.onclick === 'function') {
+
+			// Android browser on at least 3.2 requires a new reference to the function in layer.onclick
+			// - the old one won't work if passed to addEventListener directly.
+			oldOnClick = layer.onclick;
+			layer.addEventListener('click', function (event) {
+				oldOnClick(event);
+			}, false);
+			layer.onclick = null;
+		}
+	}
+
+	/**
+ * Windows Phone 8.1 fakes user agent string to look like Android and iPhone.
+ *
+ * @type boolean
+ */
+	var deviceIsWindowsPhone = navigator.userAgent.indexOf("Windows Phone") >= 0;
+
+	/**
+  * Android requires exceptions.
+  *
+  * @type boolean
+  */
+	var deviceIsAndroid = navigator.userAgent.indexOf('Android') > 0 && !deviceIsWindowsPhone;
+
+	/**
+  * iOS requires exceptions.
+  *
+  * @type boolean
+  */
+	var deviceIsIOS = /iP(ad|hone|od)/.test(navigator.userAgent) && !deviceIsWindowsPhone;
+
+	/**
+  * iOS 4 requires an exception for select elements.
+  *
+  * @type boolean
+  */
+	var deviceIsIOS4 = deviceIsIOS && /OS 4_\d(_\d)?/.test(navigator.userAgent);
+
+	/**
+  * iOS 6.0-7.* requires the target element to be manually derived
+  *
+  * @type boolean
+  */
+	var deviceIsIOSWithBadTarget = deviceIsIOS && /OS [6-7]_\d/.test(navigator.userAgent);
+
+	/**
+  * BlackBerry requires exceptions.
+  *
+  * @type boolean
+  */
+	var deviceIsBlackBerry10 = navigator.userAgent.indexOf('BB10') > 0;
+
+	/**
+  * Determine whether a given element requires a native click.
+  *
+  * @param {EventTarget|Element} target Target DOM element
+  * @returns {boolean} Returns true if the element needs a native click
+  */
+	FastClick.prototype.needsClick = function (target) {
+		switch (target.nodeName.toLowerCase()) {
+
+			// Don't send a synthetic click to disabled inputs (issue #62)
+			case 'button':
+			case 'select':
+			case 'textarea':
+				if (target.disabled) {
+					return true;
+				}
+
+				break;
+			case 'input':
+
+				// File inputs need real clicks on iOS 6 due to a browser bug (issue #68)
+				if (deviceIsIOS && target.type === 'file' || target.disabled) {
+					return true;
+				}
+
+				break;
+			case 'label':
+			case 'iframe': // iOS8 homescreen apps can prevent events bubbling into frames
+			case 'video':
+				return true;
+		}
+
+		return (/\bneedsclick\b/.test(target.className)
+		);
+	};
+
+	/**
+  * Determine whether a given element requires a call to focus to simulate click into element.
+  *
+  * @param {EventTarget|Element} target Target DOM element
+  * @returns {boolean} Returns true if the element requires a call to focus to simulate native click.
+  */
+	FastClick.prototype.needsFocus = function (target) {
+		switch (target.nodeName.toLowerCase()) {
+			case 'textarea':
+				return true;
+			case 'select':
+				return !deviceIsAndroid;
+			case 'input':
+				switch (target.type) {
+					case 'button':
+					case 'checkbox':
+					case 'file':
+					case 'image':
+					case 'radio':
+					case 'submit':
+						return false;
+				}
+
+				// No point in attempting to focus disabled inputs
+				return !target.disabled && !target.readOnly;
+			default:
+				return (/\bneedsfocus\b/.test(target.className)
+				);
+		}
+	};
+
+	/**
+  * Send a click event to the specified element.
+  *
+  * @param {EventTarget|Element} targetElement
+  * @param {Event} event
+  */
+	FastClick.prototype.sendClick = function (targetElement, event) {
+		var clickEvent, touch;
+
+		// On some Android devices activeElement needs to be blurred otherwise the synthetic click will have no effect (#24)
+		if (document.activeElement && document.activeElement !== targetElement) {
+			document.activeElement.blur();
+		}
+
+		touch = event.changedTouches[0];
+
+		// Synthesise a click event, with an extra attribute so it can be tracked
+		clickEvent = document.createEvent('MouseEvents');
+		clickEvent.initMouseEvent(this.determineEventType(targetElement), true, true, window, 1, touch.screenX, touch.screenY, touch.clientX, touch.clientY, false, false, false, false, 0, null);
+		clickEvent.forwardedTouchEvent = true;
+		targetElement.dispatchEvent(clickEvent);
+	};
+
+	FastClick.prototype.determineEventType = function (targetElement) {
+
+		//Issue #159: Android Chrome Select Box does not open with a synthetic click event
+		if (deviceIsAndroid && targetElement.tagName.toLowerCase() === 'select') {
+			return 'mousedown';
+		}
+
+		return 'click';
+	};
+
+	/**
+  * @param {EventTarget|Element} targetElement
+  */
+	FastClick.prototype.focus = function (targetElement) {
+		var length;
+
+		// Issue #160: on iOS 7, some input elements (e.g. date datetime month) throw a vague TypeError on setSelectionRange. These elements don't have an integer value for the selectionStart and selectionEnd properties, but unfortunately that can't be used for detection because accessing the properties also throws a TypeError. Just check the type instead. Filed as Apple bug #15122724.
+		if (deviceIsIOS && targetElement.setSelectionRange && targetElement.type.indexOf('date') !== 0 && targetElement.type !== 'time' && targetElement.type !== 'month') {
+			length = targetElement.value.length;
+			targetElement.setSelectionRange(length, length);
+		} else {
+			targetElement.focus();
+		}
+	};
+
+	/**
+  * Check whether the given target element is a child of a scrollable layer and if so, set a flag on it.
+  *
+  * @param {EventTarget|Element} targetElement
+  */
+	FastClick.prototype.updateScrollParent = function (targetElement) {
+		var scrollParent, parentElement;
+
+		scrollParent = targetElement.fastClickScrollParent;
+
+		// Attempt to discover whether the target element is contained within a scrollable layer. Re-check if the
+		// target element was moved to another parent.
+		if (!scrollParent || !scrollParent.contains(targetElement)) {
+			parentElement = targetElement;
+			do {
+				if (parentElement.scrollHeight > parentElement.offsetHeight) {
+					scrollParent = parentElement;
+					targetElement.fastClickScrollParent = parentElement;
+					break;
+				}
+
+				parentElement = parentElement.parentElement;
+			} while (parentElement);
+		}
+
+		// Always update the scroll top tracker if possible.
+		if (scrollParent) {
+			scrollParent.fastClickLastScrollTop = scrollParent.scrollTop;
+		}
+	};
+
+	/**
+  * @param {EventTarget} targetElement
+  * @returns {Element|EventTarget}
+  */
+	FastClick.prototype.getTargetElementFromEventTarget = function (eventTarget) {
+
+		// On some older browsers (notably Safari on iOS 4.1 - see issue #56) the event target may be a text node.
+		if (eventTarget.nodeType === Node.TEXT_NODE) {
+			return eventTarget.parentNode;
+		}
+
+		return eventTarget;
+	};
+
+	/**
+  * On touch start, record the position and scroll offset.
+  *
+  * @param {Event} event
+  * @returns {boolean}
+  */
+	FastClick.prototype.onTouchStart = function (event) {
+		var targetElement, touch, selection;
+
+		// Ignore multiple touches, otherwise pinch-to-zoom is prevented if both fingers are on the FastClick element (issue #111).
+		if (event.targetTouches.length > 1) {
+			return true;
+		}
+
+		targetElement = this.getTargetElementFromEventTarget(event.target);
+		touch = event.targetTouches[0];
+
+		if (deviceIsIOS) {
+
+			// Only trusted events will deselect text on iOS (issue #49)
+			selection = window.getSelection();
+			if (selection.rangeCount && !selection.isCollapsed) {
+				return true;
+			}
+
+			if (!deviceIsIOS4) {
+
+				// Weird things happen on iOS when an alert or confirm dialog is opened from a click event callback (issue #23):
+				// when the user next taps anywhere else on the page, new touchstart and touchend events are dispatched
+				// with the same identifier as the touch event that previously triggered the click that triggered the alert.
+				// Sadly, there is an issue on iOS 4 that causes some normal touch events to have the same identifier as an
+				// immediately preceeding touch event (issue #52), so this fix is unavailable on that platform.
+				// Issue 120: touch.identifier is 0 when Chrome dev tools 'Emulate touch events' is set with an iOS device UA string,
+				// which causes all touch events to be ignored. As this block only applies to iOS, and iOS identifiers are always long,
+				// random integers, it's safe to to continue if the identifier is 0 here.
+				if (touch.identifier && touch.identifier === this.lastTouchIdentifier) {
+					event.preventDefault();
+					return false;
+				}
+
+				this.lastTouchIdentifier = touch.identifier;
+
+				// If the target element is a child of a scrollable layer (using -webkit-overflow-scrolling: touch) and:
+				// 1) the user does a fling scroll on the scrollable layer
+				// 2) the user stops the fling scroll with another tap
+				// then the event.target of the last 'touchend' event will be the element that was under the user's finger
+				// when the fling scroll was started, causing FastClick to send a click event to that layer - unless a check
+				// is made to ensure that a parent layer was not scrolled before sending a synthetic click (issue #42).
+				this.updateScrollParent(targetElement);
+			}
+		}
+
+		this.trackingClick = true;
+		this.trackingClickStart = event.timeStamp;
+		this.targetElement = targetElement;
+
+		this.touchStartX = touch.pageX;
+		this.touchStartY = touch.pageY;
+
+		// Prevent phantom clicks on fast double-tap (issue #36)
+		if (event.timeStamp - this.lastClickTime < this.tapDelay) {
+			event.preventDefault();
+		}
+
+		return true;
+	};
+
+	/**
+  * Based on a touchmove event object, check whether the touch has moved past a boundary since it started.
+  *
+  * @param {Event} event
+  * @returns {boolean}
+  */
+	FastClick.prototype.touchHasMoved = function (event) {
+		var touch = event.changedTouches[0],
+		    boundary = this.touchBoundary;
+
+		if (Math.abs(touch.pageX - this.touchStartX) > boundary || Math.abs(touch.pageY - this.touchStartY) > boundary) {
+			return true;
+		}
+
+		return false;
+	};
+
+	/**
+  * Update the last position.
+  *
+  * @param {Event} event
+  * @returns {boolean}
+  */
+	FastClick.prototype.onTouchMove = function (event) {
+		if (!this.trackingClick) {
+			return true;
+		}
+
+		// If the touch has moved, cancel the click tracking
+		if (this.targetElement !== this.getTargetElementFromEventTarget(event.target) || this.touchHasMoved(event)) {
+			this.trackingClick = false;
+			this.targetElement = null;
+		}
+
+		return true;
+	};
+
+	/**
+  * Attempt to find the labelled control for the given label element.
+  *
+  * @param {EventTarget|HTMLLabelElement} labelElement
+  * @returns {Element|null}
+  */
+	FastClick.prototype.findControl = function (labelElement) {
+
+		// Fast path for newer browsers supporting the HTML5 control attribute
+		if (labelElement.control !== undefined) {
+			return labelElement.control;
+		}
+
+		// All browsers under test that support touch events also support the HTML5 htmlFor attribute
+		if (labelElement.htmlFor) {
+			return document.getElementById(labelElement.htmlFor);
+		}
+
+		// If no for attribute exists, attempt to retrieve the first labellable descendant element
+		// the list of which is defined here: http://www.w3.org/TR/html5/forms.html#category-label
+		return labelElement.querySelector('button, input:not([type=hidden]), keygen, meter, output, progress, select, textarea');
+	};
+
+	/**
+  * On touch end, determine whether to send a click event at once.
+  *
+  * @param {Event} event
+  * @returns {boolean}
+  */
+	FastClick.prototype.onTouchEnd = function (event) {
+		var forElement,
+		    trackingClickStart,
+		    targetTagName,
+		    scrollParent,
+		    touch,
+		    targetElement = this.targetElement;
+
+		if (!this.trackingClick) {
+			return true;
+		}
+
+		// Prevent phantom clicks on fast double-tap (issue #36)
+		if (event.timeStamp - this.lastClickTime < this.tapDelay) {
+			this.cancelNextClick = true;
+			return true;
+		}
+
+		if (event.timeStamp - this.trackingClickStart > this.tapTimeout) {
+			return true;
+		}
+
+		// Reset to prevent wrong click cancel on input (issue #156).
+		this.cancelNextClick = false;
+
+		this.lastClickTime = event.timeStamp;
+
+		trackingClickStart = this.trackingClickStart;
+		this.trackingClick = false;
+		this.trackingClickStart = 0;
+
+		// On some iOS devices, the targetElement supplied with the event is invalid if the layer
+		// is performing a transition or scroll, and has to be re-detected manually. Note that
+		// for this to function correctly, it must be called *after* the event target is checked!
+		// See issue #57; also filed as rdar://13048589 .
+		if (deviceIsIOSWithBadTarget) {
+			touch = event.changedTouches[0];
+
+			// In certain cases arguments of elementFromPoint can be negative, so prevent setting targetElement to null
+			targetElement = document.elementFromPoint(touch.pageX - window.pageXOffset, touch.pageY - window.pageYOffset) || targetElement;
+			targetElement.fastClickScrollParent = this.targetElement.fastClickScrollParent;
+		}
+
+		targetTagName = targetElement.tagName.toLowerCase();
+		if (targetTagName === 'label') {
+			forElement = this.findControl(targetElement);
+			if (forElement) {
+				this.focus(targetElement);
+				if (deviceIsAndroid) {
+					return false;
+				}
+
+				targetElement = forElement;
+			}
+		} else if (this.needsFocus(targetElement)) {
+
+			// Case 1: If the touch started a while ago (best guess is 100ms based on tests for issue #36) then focus will be triggered anyway. Return early and unset the target element reference so that the subsequent click will be allowed through.
+			// Case 2: Without this exception for input elements tapped when the document is contained in an iframe, then any inputted text won't be visible even though the value attribute is updated as the user types (issue #37).
+			if (event.timeStamp - trackingClickStart > 100 || deviceIsIOS && window.top !== window && targetTagName === 'input') {
+				this.targetElement = null;
+				return false;
+			}
+
+			this.focus(targetElement);
+			this.sendClick(targetElement, event);
+
+			// Select elements need the event to go through on iOS 4, otherwise the selector menu won't open.
+			// Also this breaks opening selects when VoiceOver is active on iOS6, iOS7 (and possibly others)
+			if (!deviceIsIOS || targetTagName !== 'select') {
+				this.targetElement = null;
+				event.preventDefault();
+			}
+
+			return false;
+		}
+
+		if (deviceIsIOS && !deviceIsIOS4) {
+
+			// Don't send a synthetic click event if the target element is contained within a parent layer that was scrolled
+			// and this tap is being used to stop the scrolling (usually initiated by a fling - issue #42).
+			scrollParent = targetElement.fastClickScrollParent;
+			if (scrollParent && scrollParent.fastClickLastScrollTop !== scrollParent.scrollTop) {
+				return true;
+			}
+		}
+
+		// Prevent the actual click from going though - unless the target node is marked as requiring
+		// real clicks or if it is in the whitelist in which case only non-programmatic clicks are permitted.
+		if (!this.needsClick(targetElement)) {
+			event.preventDefault();
+			this.sendClick(targetElement, event);
+		}
+
+		return false;
+	};
+
+	/**
+  * On touch cancel, stop tracking the click.
+  *
+  * @returns {void}
+  */
+	FastClick.prototype.onTouchCancel = function () {
+		this.trackingClick = false;
+		this.targetElement = null;
+	};
+
+	/**
+  * Determine mouse events which should be permitted.
+  *
+  * @param {Event} event
+  * @returns {boolean}
+  */
+	FastClick.prototype.onMouse = function (event) {
+
+		// If a target element was never set (because a touch event was never fired) allow the event
+		if (!this.targetElement) {
+			return true;
+		}
+
+		if (event.forwardedTouchEvent) {
+			return true;
+		}
+
+		// Programmatically generated events targeting a specific element should be permitted
+		if (!event.cancelable) {
+			return true;
+		}
+
+		// Derive and check the target element to see whether the mouse event needs to be permitted;
+		// unless explicitly enabled, prevent non-touch click events from triggering actions,
+		// to prevent ghost/doubleclicks.
+		if (!this.needsClick(this.targetElement) || this.cancelNextClick) {
+
+			// Prevent any user-added listeners declared on FastClick element from being fired.
+			if (event.stopImmediatePropagation) {
+				event.stopImmediatePropagation();
+			} else {
+
+				// Part of the hack for browsers that don't support Event#stopImmediatePropagation (e.g. Android 2)
+				event.propagationStopped = true;
+			}
+
+			// Cancel the event
+			event.stopPropagation();
+			event.preventDefault();
+
+			return false;
+		}
+
+		// If the mouse event is permitted, return true for the action to go through.
+		return true;
+	};
+
+	/**
+  * On actual clicks, determine whether this is a touch-generated click, a click action occurring
+  * naturally after a delay after a touch (which needs to be cancelled to avoid duplication), or
+  * an actual click which should be permitted.
+  *
+  * @param {Event} event
+  * @returns {boolean}
+  */
+	FastClick.prototype.onClick = function (event) {
+		var permitted;
+
+		// It's possible for another FastClick-like library delivered with third-party code to fire a click event before FastClick does (issue #44). In that case, set the click-tracking flag back to false and return early. This will cause onTouchEnd to return early.
+		if (this.trackingClick) {
+			this.targetElement = null;
+			this.trackingClick = false;
+			return true;
+		}
+
+		// Very odd behaviour on iOS (issue #18): if a submit element is present inside a form and the user hits enter in the iOS simulator or clicks the Go button on the pop-up OS keyboard the a kind of 'fake' click event will be triggered with the submit-type input element as the target.
+		if (event.target.type === 'submit' && event.detail === 0) {
+			return true;
+		}
+
+		permitted = this.onMouse(event);
+
+		// Only unset targetElement if the click is not permitted. This will ensure that the check for !targetElement in onMouse fails and the browser's click doesn't go through.
+		if (!permitted) {
+			this.targetElement = null;
+		}
+
+		// If clicks are permitted, return true for the action to go through.
+		return permitted;
+	};
+
+	/**
+  * Remove all FastClick's event listeners.
+  *
+  * @returns {void}
+  */
+	FastClick.prototype.destroy = function () {
+		var layer = this.layer;
+
+		if (deviceIsAndroid) {
+			layer.removeEventListener('mouseover', this.onMouse, true);
+			layer.removeEventListener('mousedown', this.onMouse, true);
+			layer.removeEventListener('mouseup', this.onMouse, true);
+		}
+
+		layer.removeEventListener('click', this.onClick, true);
+		layer.removeEventListener('touchstart', this.onTouchStart, false);
+		layer.removeEventListener('touchmove', this.onTouchMove, false);
+		layer.removeEventListener('touchend', this.onTouchEnd, false);
+		layer.removeEventListener('touchcancel', this.onTouchCancel, false);
+	};
+
+	/**
+  * Check whether FastClick is needed.
+  *
+  * @param {Element} layer The layer to listen on
+  */
+	FastClick.notNeeded = function (layer) {
+		var metaViewport;
+		var chromeVersion;
+		var blackberryVersion;
+		var firefoxVersion;
+
+		// Devices that don't support touch don't need FastClick
+		if (typeof window.ontouchstart === 'undefined') {
+			return true;
+		}
+
+		// Chrome version - zero for other browsers
+		chromeVersion = +(/Chrome\/([0-9]+)/.exec(navigator.userAgent) || [, 0])[1];
+
+		if (chromeVersion) {
+
+			if (deviceIsAndroid) {
+				metaViewport = document.querySelector('meta[name=viewport]');
+
+				if (metaViewport) {
+					// Chrome on Android with user-scalable="no" doesn't need FastClick (issue #89)
+					if (metaViewport.content.indexOf('user-scalable=no') !== -1) {
+						return true;
+					}
+					// Chrome 32 and above with width=device-width or less don't need FastClick
+					if (chromeVersion > 31 && document.documentElement.scrollWidth <= window.outerWidth) {
+						return true;
+					}
+				}
+
+				// Chrome desktop doesn't need FastClick (issue #15)
+			} else {
+				return true;
+			}
+		}
+
+		if (deviceIsBlackBerry10) {
+			blackberryVersion = navigator.userAgent.match(/Version\/([0-9]*)\.([0-9]*)/);
+
+			// BlackBerry 10.3+ does not require Fastclick library.
+			// https://github.com/ftlabs/fastclick/issues/251
+			if (blackberryVersion[1] >= 10 && blackberryVersion[2] >= 3) {
+				metaViewport = document.querySelector('meta[name=viewport]');
+
+				if (metaViewport) {
+					// user-scalable=no eliminates click delay.
+					if (metaViewport.content.indexOf('user-scalable=no') !== -1) {
+						return true;
+					}
+					// width=device-width (or less than device-width) eliminates click delay.
+					if (document.documentElement.scrollWidth <= window.outerWidth) {
+						return true;
+					}
+				}
+			}
+		}
+
+		// IE10 with -ms-touch-action: none or manipulation, which disables double-tap-to-zoom (issue #97)
+		if (layer.style.msTouchAction === 'none' || layer.style.touchAction === 'manipulation') {
+			return true;
+		}
+
+		// Firefox version - zero for other browsers
+		firefoxVersion = +(/Firefox\/([0-9]+)/.exec(navigator.userAgent) || [, 0])[1];
+
+		if (firefoxVersion >= 27) {
+			// Firefox 27+ does not have tap delay if the content is not zoomable - https://bugzilla.mozilla.org/show_bug.cgi?id=922896
+
+			metaViewport = document.querySelector('meta[name=viewport]');
+			if (metaViewport && (metaViewport.content.indexOf('user-scalable=no') !== -1 || document.documentElement.scrollWidth <= window.outerWidth)) {
+				return true;
+			}
+		}
+
+		// IE11: prefixed -ms-touch-action is no longer supported and it's recomended to use non-prefixed version
+		// http://msdn.microsoft.com/en-us/library/windows/apps/Hh767313.aspx
+		if (layer.style.touchAction === 'none' || layer.style.touchAction === 'manipulation') {
+			return true;
+		}
+
+		return false;
+	};
+
+	/**
+  * Factory method for creating a FastClick object
+  *
+  * @param {Element} layer The layer to listen on
+  * @param {Object} [options={}] The options to override the defaults
+  */
+	FastClick.attach = function (layer, options) {
+		return new FastClick(layer, options);
+	};
+
+	if ( true && _typeof(__webpack_require__(/*! !webpack amd options */ "./node_modules/webpack/buildin/amd-options.js")) === 'object' && __webpack_require__(/*! !webpack amd options */ "./node_modules/webpack/buildin/amd-options.js")) {
+
+		// AMD. Register as an anonymous module.
+		!(__WEBPACK_AMD_DEFINE_RESULT__ = (function () {
+			return FastClick;
+		}).call(exports, __webpack_require__, exports, module),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else if ( true && module.exports) {
+		module.exports = FastClick.attach;
+		module.exports.FastClick = FastClick;
+	} else {
+		window.FastClick = FastClick;
+	}
+})();
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/lib/addStyles.js":
 /*!****************************************************!*\
   !*** ./node_modules/style-loader/lib/addStyles.js ***!
@@ -8453,6 +9652,20 @@ module.exports = function (css) {
 	// send back the fixed css
 	return fixedCss;
 };
+
+/***/ }),
+
+/***/ "./node_modules/webpack/buildin/amd-options.js":
+/*!****************************************!*\
+  !*** (webpack)/buildin/amd-options.js ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
+module.exports = __webpack_amd_options__;
+
+/* WEBPACK VAR INJECTION */}.call(this, {}))
 
 /***/ }),
 

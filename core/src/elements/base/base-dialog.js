@@ -21,6 +21,11 @@ export default class BaseDialogElement extends BaseElement{
         util.triggerElementEvent(this, `pre${action}`, {});
 
         if(action === 'show'){
+            if(!this._animateData){
+                util.triggerElementEvent(this, `post${action}`, {});
+                this._toggleStyle(shouldShow);
+                return;
+            }
             animator.animate(this._animateData[action], () => {
                 // postshow事件
                 util.triggerElementEvent(this, `post${action}`, {});
@@ -29,6 +34,11 @@ export default class BaseDialogElement extends BaseElement{
             this._toggleStyle(shouldShow);
         }
         else {
+            if(!this._animateData){
+                util.triggerElementEvent(this, `post${action}`, {});
+                this._toggleStyle(shouldShow);
+                return;
+            }
             animator.animate(this._animateData[action], () => {
                 this._toggleStyle(shouldShow);
                 // posthide事件

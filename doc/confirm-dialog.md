@@ -1,5 +1,6 @@
 ## confirm-dialog
 
+### HTML
 ```html
     <template id="confirm-dialog.html">
         <mui-confirm-dialog id="my-dialog"></mui-confirm-dialog>
@@ -12,6 +13,7 @@
     <button id="btn2">show: 方式二</button>
 ```
 
+### JS API
 ```javascript
     // 创建dialog
     // 方式一

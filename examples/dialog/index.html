@@ -19,7 +19,7 @@
 </head>
 <body>
 
-    <template id="confirm-dialog.html">
+    <template id="dialog.html">
         <mui-dialog id="my-dialog">
             <div class="dialog__header">头部信息</div>
             <div class="dialog__body">
@@ -36,20 +36,22 @@
         </mui-dialog>
     </template>
 
-    <button id="btn1">show</button>
-    <button id="btn2">hide</button>
+    <button id="btn1">方式一</button>
+    <button id="btn2">方式二</button>
 
-    <!--<mui-confirm-dialog id="dialog">12</mui-confirm-dialog>-->
-    <!--<div id="a">-->
-        <!--<a href="">地址</a>-->
-        <!--<img src=".../baidu.com" alt="">-->
-    <!--</div>-->
-
-    <!--<script type="text/javascript">-->
-        <!--var oldNode = document.getElementById('a');-->
-        <!--var newNode = document.importNode(oldNode,true)-->
-        <!--console.log(newNode);-->
-        <!--document.getElementById('dialog').appendChild(newNode)-->
-    <!--</script>-->
+    <mui-dialog id="my-dialog2">
+        <div class="dialog__header">头部信息</div>
+        <div class="dialog__body">
+            <p>大段的文字...</p>
+            <p>大段的文字...</p>
+            <p>大段的文字...</p>
+            <p>大段的文字...</p>
+            <p>大段的文字...</p>
+            <p>大段的文字...</p>
+            <p>大段的文字...</p>
+            <p>大段的文字...</p>
+        </div>
+        <div class="dialog__footer">关闭</div>
+    </mui-dialog>
 </body>
 </html>

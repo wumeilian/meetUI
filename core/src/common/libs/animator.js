@@ -1,4 +1,5 @@
 import util from './util';
+import { isType } from './commonUtils';
 
 const Animator = function (){
     this.pfx = ["webkitAnimationEnd", "animationend"];
@@ -13,18 +14,27 @@ Animator.prototype.startElAnimate = function (el, style) {
 
 Animator.prototype.animate = function(animateData, callback) {
     // 如果不存在、不是数组、数组长度未0 则返回
-    if(!animateData || !animateData instanceof Array || animateData.length === 0){
+    if(!animateData){
         return;
     }
 
-    this.fixAnimateData(animateData);
+    let animateObjArray = [];
+
+    if(isType(animateData, 'object')){
+        animateObjArray.push(animateData)
+    }
+    else {
+        animateObjArray = animateData
+    }
+
+    this.fixAnimateData(animateObjArray);
 
     // 遍历各元素，增加动画
-    animateData.forEach(item => {
+    animateObjArray.forEach(item => {
         const element = item.el;
         this.startElAnimate(element, item.style);
         if(item.animateHookEnable){
-            this.transitionEnd(element, animateData, callback)
+            this.transitionEnd(element, animateObjArray, callback)
         }
     });
 

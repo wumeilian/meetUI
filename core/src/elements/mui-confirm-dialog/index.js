@@ -83,7 +83,7 @@ export default class ConfirmDialogElement extends BaseDialogElement{
          * </mui-dialog>
          */
 
-        // 设置的可滚动区域
+        // 获取属性
         const scAttr = util.getConfAttr.call(this);
         const text = merge(textObj, scAttr);
 

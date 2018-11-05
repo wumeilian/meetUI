@@ -2,22 +2,22 @@
 
 ## 方式一
 ```html
-   <template id="confirm-dialog.html">
-        <mui-dialog id="my-dialog">
-            <div class="dialog__header">头部信息</div>
-            <div class="dialog__body">
-                <p>大段的文字...</p>
-                <p>大段的文字...</p>
-                <p>大段的文字...</p>
-                <p>大段的文字...</p>
-                <p>大段的文字...</p>
-                <p>大段的文字...</p>
-                <p>大段的文字...</p>
-                <p>大段的文字...</p>
-            </div>
-            <div class="dialog__footer">关闭</div>
-        </mui-dialog>
-    </template>
+<template id="confirm-dialog.html">
+    <mui-dialog id="my-dialog">
+        <div class="dialog__header">头部信息</div>
+        <div class="dialog__body">
+            <p>大段的文字...</p>
+            <p>大段的文字...</p>
+            <p>大段的文字...</p>
+            <p>大段的文字...</p>
+            <p>大段的文字...</p>
+            <p>大段的文字...</p>
+            <p>大段的文字...</p>
+            <p>大段的文字...</p>
+        </div>
+        <div class="dialog__footer">关闭</div>
+    </mui-dialog>
+</template>
 ```
 
 ### JS API

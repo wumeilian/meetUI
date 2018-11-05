@@ -1,12 +1,13 @@
 ## popup
 
 ## 方式一
+### HTML
 ```html
-    <button id="btn">按钮</button>
+<button id="btn">按钮</button>
 
-    <mui-popup conf-header="自定义标题" id="my-popup">
-            自定义内容和文字
-    </mui-popup>
+<mui-popup conf-header="自定义标题" id="my-popup">
+        自定义内容和文字
+</mui-popup>
 ```
 
 ### JS API
@@ -20,7 +21,7 @@ btn.addEventListener('click', function () {
 
 ```
 ## 方式二
-
+### HTML
 ```html
 <template id="popup.html">
     <mui-popup id="my-popup2">
@@ -28,7 +29,7 @@ btn.addEventListener('click', function () {
     </mui-popup>
 </template>
 ```
-
+### JS API
 ```javascript
 // 创建popup
 mui.createElement('popup.html', {

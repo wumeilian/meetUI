@@ -21,3 +21,4 @@ closeEl.addEventListener('click', function() {
     dialog.hide();
 });
 
+

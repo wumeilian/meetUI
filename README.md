@@ -8,9 +8,9 @@ features
 
 
 ## use
-[dialog](./doc/dialog.md)
-[confirm-dialog](./doc/confirm-dialog.md)
-[popup](./doc/popup.md)
+- [dialog](./doc/dialog.md)
+- [confirm-dialog](./doc/confirm-dialog.md)
+- [popup](./doc/popup.md)
 
 ## develop
 

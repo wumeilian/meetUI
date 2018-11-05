@@ -84,3 +84,15 @@ mui-confirm-dialog .dialog__footer::before {
 .dialog__footer .dialog__confirm{
     color: var(--theme-color);
 }
+
+.masker-showUp{
+    animation: muiFadeIn 0.2s linear ;
+}
+
+.dialog-zoomIn {
+    animation: muiZoomIn 0.2s linear;
+}
+
+.dialog-fadeOut {
+    animation: muiFadeOut 0.2s linear;
+}

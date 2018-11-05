@@ -186,4 +186,8 @@ util.triggerElementEvent = (target, eventName, detail = {}) => {
     return event;
 };
 
+util._transitionEndEvents = (function() {
+    return ["webkitAnimationEnd", "animationend"]
+})();
+
 export default util;

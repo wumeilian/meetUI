@@ -1,5 +1,6 @@
 import BaseElement from './base-element';
 import util from '../../common/libs/util';
+import animator from '../../common/libs/animator';
 
 export default class BaseDialogElement extends BaseElement{
 
@@ -15,11 +16,27 @@ export default class BaseDialogElement extends BaseElement{
 
     _setVisible(shouldShow){
         const action = shouldShow ? 'show' : 'hide';
-        // 开/关前的hook，等动画加上以后有用
+
+        // preshow/prehide事件
         util.triggerElementEvent(this, `pre${action}`, {});
-        this._toggleStyle(shouldShow);
-        // 开/关前的hook
-        util.triggerElementEvent(this, `post${action}`, {});
+
+        if(action === 'show'){
+            animator.animate(this._animateData[action], () => {
+                // postshow事件
+                util.triggerElementEvent(this, `post${action}`, {});
+            });
+
+            this._toggleStyle(shouldShow);
+        }
+        else {
+            animator.animate(this._animateData[action], () => {
+                this._toggleStyle(shouldShow);
+                // posthide事件
+                util.triggerElementEvent(this, `post${action}`, {});
+            });
+        }
+
+
     }
 
     // 是否html noscroll
@@ -34,7 +51,7 @@ export default class BaseDialogElement extends BaseElement{
 
     _cancel() {
         console.log('点击了cancel');
-        this._setVisible(false)
+        this._setVisible(false);
         this._setNoScroll(false);
     }
 

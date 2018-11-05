@@ -16,6 +16,29 @@ export default class ConfirmDialogElement extends BaseDialogElement{
 
         this._compile();
         this._triggerEvent = this._triggerEvent.bind(this);
+        this._animateData = {
+            show: [
+                {
+                    el: this._mask,
+                    style: 'masker-showUp'
+                },
+                {
+                    el: this._dialog,
+                    style: 'dialog-zoomIn',
+                    animateHookEnable: true
+                }
+            ],
+            hide: [
+                {
+                    el: this._mask,
+                    style: 'dialog-fadeOut'
+                },
+                {
+                    el: this._dialog,
+                    style: 'dialog-fadeOut'
+                }
+            ]
+        }
     }
 
     get _mask() {

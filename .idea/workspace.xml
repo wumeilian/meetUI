@@ -2,16 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="31d8bd72-fa49-45a7-a14b-685997dbb121" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/core/src/common/libs/platform.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/src/setup.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/css/animate.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/src/common/libs/animator.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/confirm-dialog/confirm-dialog.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/build/confirm-dialog/confirm-dialog.bundle.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/confirm-dialog/confirm-dialog.bundle.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/build/confirm-dialog/confirm-dialog.bundle.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/common/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/common/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/css/common.css" beforeDir="false" afterPath="$PROJECT_DIR$/core/css/common.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/common/libs/util.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/common/libs/util.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/elements/base/base-dialog.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/elements/base/base-dialog.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/elements/mui-confirm-dialog/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/elements/mui-confirm-dialog/index.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/src/elements/mui-confirm-dialog/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/elements/mui-confirm-dialog/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/index.esm.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/index.esm.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/examples/confirm-dialog/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/examples/confirm-dialog/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -39,10 +40,10 @@
         <counts>
           <entry key="LICENSE" value="1" />
           <entry key="babelrc" value="4" />
-          <entry key="css" value="33" />
+          <entry key="css" value="39" />
           <entry key="gitignore" value="3" />
           <entry key="html" value="20" />
-          <entry key="js" value="126" />
+          <entry key="js" value="139" />
           <entry key="json" value="6" />
           <entry key="md" value="6" />
           <entry key="ts" value="1" />
@@ -50,10 +51,10 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="CSS" value="33" />
+          <entry key="CSS" value="39" />
           <entry key="HTML" value="20" />
           <entry key="JSON" value="10" />
-          <entry key="JavaScript" value="126" />
+          <entry key="JavaScript" value="139" />
           <entry key="PLAIN_TEXT" value="10" />
           <entry key="TypeScript" value="1" />
         </counts>
@@ -61,20 +62,20 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="babelrc" value="25" />
-          <entry key="css" value="992" />
+          <entry key="css" value="1345" />
           <entry key="gitignore" value="33" />
           <entry key="html" value="742" />
-          <entry key="js" value="9720" />
+          <entry key="js" value="13008" />
           <entry key="json" value="269" />
           <entry key="md" value="375" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="CSS" value="992" />
+          <entry key="CSS" value="1345" />
           <entry key="HTML" value="742" />
           <entry key="JSON" value="294" />
-          <entry key="JavaScript" value="9720" />
+          <entry key="JavaScript" value="13008" />
           <entry key="PLAIN_TEXT" value="408" />
         </counts>
       </usages-collector>
@@ -90,8 +91,20 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/core/src/elements/mui-confirm-dialog/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1976">
-              <caret line="104" column="8" selection-start-line="104" selection-start-column="8" selection-end-line="104" selection-end-column="8" />
+            <state relative-caret-position="-1428">
+              <caret line="27" column="37" selection-start-line="27" selection-start-column="37" selection-end-line="27" selection-end-column="37" />
+              <folding>
+                <element signature="e#0#21#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/src/elements/mui-dialog/index.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="311">
+              <caret line="48" column="24" selection-start-line="48" selection-start-column="24" selection-end-line="48" selection-end-column="24" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
               </folding>
@@ -100,61 +113,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/core/src/setup.js">
+        <entry file="file://$PROJECT_DIR$/core/src/elements/mui-confirm-dialog/index.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="114">
-              <caret line="6" selection-start-line="6" selection-end-line="6" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/examples/dialog/index.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="342">
-              <caret line="18" selection-start-line="18" selection-end-line="18" />
-              <folding>
-                <element signature="e#0#20#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/src/index.esm.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="38">
-              <caret line="2" column="23" selection-start-line="2" selection-start-column="23" selection-end-line="2" selection-end-column="23" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/src/common/index.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="114">
-              <caret line="6" column="2" selection-start-line="6" selection-start-column="2" selection-end-line="6" selection-end-column="2" />
-              <folding>
-                <element signature="e#0#30#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/core/src/common/libs/platform.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="456">
-              <caret line="42" column="1" selection-start-line="42" selection-start-column="1" selection-end-line="42" selection-end-column="1" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/examples/confirm-dialog/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="494">
-              <caret line="26" selection-start-line="26" selection-end-line="26" />
+            <state relative-caret-position="426">
+              <caret line="87" column="15" selection-start-line="87" selection-start-column="15" selection-end-line="87" selection-end-column="15" />
             </state>
           </provider>
         </entry>
@@ -162,8 +124,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/examples/confirm-dialog/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="403">
-              <caret line="59" column="24" selection-start-line="59" selection-start-column="24" selection-end-line="59" selection-end-column="24" />
+            <state relative-caret-position="548">
+              <caret line="57" selection-start-line="57" selection-end-line="57" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
               </folding>
@@ -172,10 +134,58 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/node_modules/fastclick/lib/fastclick.js">
+        <entry file="file://$PROJECT_DIR$/core/css/animate.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15884">
-              <caret line="836" column="32" selection-start-line="836" selection-start-column="23" selection-end-line="836" selection-end-column="32" />
+            <state relative-caret-position="380">
+              <caret line="20" column="23" selection-start-line="20" selection-start-column="23" selection-end-line="20" selection-end-column="23" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/css/common.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="228">
+              <caret line="12" column="20" selection-start-line="12" selection-start-column="20" selection-end-line="12" selection-end-column="20" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/src/elements/base/base-dialog.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="570">
+              <caret line="39" column="5" selection-start-line="39" selection-start-column="5" selection-end-line="39" selection-end-column="5" />
+              <folding>
+                <element signature="e#0#41#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/src/common/libs/animator.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="266">
+              <caret line="56" selection-start-line="56" selection-end-line="56" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/src/common/libs/util.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="472">
+              <caret line="188" column="41" selection-start-line="188" selection-start-column="41" selection-end-line="188" selection-end-column="41" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/core/src/common/libs/commonUtils.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="420">
+              <caret line="67" column="9" selection-start-line="67" selection-start-column="9" selection-end-line="67" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -215,6 +225,8 @@
       <find>_dialog</find>
       <find>confirm</find>
       <find>FastClick</find>
+      <find>startElAnimate</find>
+      <find>_transitionEndEvents</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -268,21 +280,24 @@
         <option value="$PROJECT_DIR$/core/src/common/libs/template.js" />
         <option value="$PROJECT_DIR$/examples/confirm-dialog/index.css" />
         <option value="$PROJECT_DIR$/core/src/common/libs/commonUtils.js" />
-        <option value="$PROJECT_DIR$/core/css/common.css" />
         <option value="$PROJECT_DIR$/postcss.config.js" />
         <option value="$PROJECT_DIR$/core/src/elements/mui-dialog/index.css" />
         <option value="$PROJECT_DIR$/core/css/variable.css" />
-        <option value="$PROJECT_DIR$/core/src/elements/mui-confirm-dialog/index.css" />
         <option value="$PROJECT_DIR$/examples/confirm-dialog/index.html" />
-        <option value="$PROJECT_DIR$/core/src/common/libs/util.js" />
-        <option value="$PROJECT_DIR$/core/src/elements/base/base-dialog.js" />
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/core/src/elements/mui-confirm-dialog/index.js" />
-        <option value="$PROJECT_DIR$/examples/confirm-dialog/index.js" />
         <option value="$PROJECT_DIR$/core/src/common/index.js" />
         <option value="$PROJECT_DIR$/core/src/index.esm.js" />
         <option value="$PROJECT_DIR$/core/src/common/libs/platform.js" />
         <option value="$PROJECT_DIR$/core/src/setup.js" />
+        <option value="$PROJECT_DIR$/core/css/common.css" />
+        <option value="$PROJECT_DIR$/core/css/animate.css" />
+        <option value="$PROJECT_DIR$/core/src/common/libs/animator2.js" />
+        <option value="$PROJECT_DIR$/core/src/common/libs/util.js" />
+        <option value="$PROJECT_DIR$/core/src/elements/mui-confirm-dialog/index.js" />
+        <option value="$PROJECT_DIR$/core/src/common/libs/animator.js" />
+        <option value="$PROJECT_DIR$/core/src/elements/base/base-dialog.js" />
+        <option value="$PROJECT_DIR$/examples/confirm-dialog/index.js" />
+        <option value="$PROJECT_DIR$/core/src/elements/mui-confirm-dialog/index.css" />
       </list>
     </option>
   </component>
@@ -307,10 +322,10 @@
     </packageJsonPaths>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-7" />
-    <option name="y" value="11" />
+    <option name="x" value="1941" />
+    <option name="y" value="16" />
     <option name="width" value="1925" />
-    <option name="height" value="1036" />
+    <option name="height" value="1065" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -374,6 +389,12 @@
               <item name="MeetUI" type="b2602c69:ProjectViewProjectNode" />
               <item name="MeetUI" type="462c0819:PsiDirectoryNode" />
               <item name="core" type="462c0819:PsiDirectoryNode" />
+              <item name="css" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MeetUI" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MeetUI" type="462c0819:PsiDirectoryNode" />
+              <item name="core" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -404,7 +425,23 @@
               <item name="core" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="elements" type="462c0819:PsiDirectoryNode" />
+              <item name="base" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MeetUI" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MeetUI" type="462c0819:PsiDirectoryNode" />
+              <item name="core" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="elements" type="462c0819:PsiDirectoryNode" />
               <item name="mui-confirm-dialog" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MeetUI" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MeetUI" type="462c0819:PsiDirectoryNode" />
+              <item name="core" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="elements" type="462c0819:PsiDirectoryNode" />
+              <item name="mui-dialog" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="MeetUI" type="b2602c69:ProjectViewProjectNode" />
@@ -502,18 +539,18 @@
       <workItem from="1540342744619" duration="42000" />
       <workItem from="1540450450762" duration="19250000" />
       <workItem from="1540690870226" duration="120009000" />
-      <workItem from="1541213632004" duration="3073000" />
+      <workItem from="1541213632004" duration="22044000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="150658000" />
+    <option name="totallyTimeSpent" value="169629000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="11" width="1925" height="1036" extended-state="0" />
+    <frame x="1941" y="16" width="1925" height="1065" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49928263" visible="true" weight="0.14902808" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49928263" visible="true" weight="0.15658747" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.50071734" side_tool="true" weight="0.1908397" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -525,7 +562,7 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="9" sideWeight="0.49945474" visible="true" weight="0.2371134" />
+      <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.49945474" visible="true" weight="0.19955654" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50054526" side_tool="true" weight="0.2519084" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -560,17 +597,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/index.js" />
-    <entry file="file://$PROJECT_DIR$/LICENSE">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-24" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/webpack-dev-server/lib/Server.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1881" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/libs/ip.js">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -736,27 +762,6 @@
         <state relative-caret-position="-4161" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/css/common.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="694">
-          <caret line="227" column="19" selection-start-line="227" selection-start-column="19" selection-end-line="227" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/css/variable.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="5" column="1" selection-start-line="5" selection-start-column="1" selection-end-line="5" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/common/libs/mui-template.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="551">
-          <caret line="123" column="1" selection-start-line="123" selection-start-column="1" selection-end-line="123" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/src/polyfills/common.js">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -771,13 +776,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/elements/mui-confirm-dialog/index.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="71" column="15" selection-start-line="71" selection-start-column="1" selection-end-line="71" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/examples/dialog/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="608">
@@ -788,38 +786,10 @@
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/common/libs/util.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="415">
-          <caret line="32" column="26" selection-start-line="32" selection-start-column="26" selection-end-line="32" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/common/libs/commonUtils.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="67" column="9" selection-start-line="67" selection-start-column="9" selection-end-line="67" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="282">
           <caret line="56" selection-start-line="56" selection-end-line="56" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/elements/mui-dialog/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="904">
-          <caret line="48" column="24" selection-start-line="48" selection-start-column="24" selection-end-line="48" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/elements/base/base-dialog.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="69" column="68" lean-forward="true" selection-start-line="69" selection-start-column="68" selection-end-line="69" selection-end-column="68" />
         </state>
       </provider>
     </entry>
@@ -844,32 +814,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/examples/confirm-dialog/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="403">
-          <caret line="59" column="24" selection-start-line="59" selection-start-column="24" selection-end-line="59" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#20#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/examples/dialog/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="342">
           <caret line="18" selection-start-line="18" selection-end-line="18" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/elements/mui-confirm-dialog/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1976">
-          <caret line="104" column="8" selection-start-line="104" selection-start-column="8" selection-end-line="104" selection-end-column="8" />
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -891,17 +841,120 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/core/src/common/libs/platform.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="456">
-          <caret line="42" column="1" selection-start-line="42" selection-start-column="1" selection-end-line="42" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/core/src/setup.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="114">
           <caret line="6" selection-start-line="6" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/css/variable.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="5" column="1" selection-start-line="5" selection-start-column="1" selection-end-line="5" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/common/libs/platform.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="509">
+          <caret line="42" column="1" selection-start-line="42" selection-start-column="1" selection-end-line="42" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/common/libs/mui-template.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="489">
+          <caret line="123" column="1" selection-start-line="123" selection-start-column="1" selection-end-line="123" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/common/libs/commonUtils.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="67" column="9" selection-start-line="67" selection-start-column="9" selection-end-line="67" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/common/libs/animator2.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="2" selection-start-line="2" selection-end-line="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/css/common.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="12" column="20" selection-start-line="12" selection-start-column="20" selection-end-line="12" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/css/animate.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="380">
+          <caret line="20" column="23" selection-start-line="20" selection-start-column="23" selection-end-line="20" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/common/libs/util.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="472">
+          <caret line="188" column="41" selection-start-line="188" selection-start-column="41" selection-end-line="188" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/elements/mui-dialog/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="311">
+          <caret line="48" column="24" selection-start-line="48" selection-start-column="24" selection-end-line="48" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/common/libs/animator.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="56" selection-start-line="56" selection-end-line="56" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/elements/base/base-dialog.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="570">
+          <caret line="39" column="5" selection-start-line="39" selection-start-column="5" selection-end-line="39" selection-end-column="5" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/elements/mui-confirm-dialog/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1428">
+          <caret line="27" column="37" selection-start-line="27" selection-start-column="37" selection-end-line="27" selection-end-column="37" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/examples/confirm-dialog/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="548">
+          <caret line="57" selection-start-line="57" selection-end-line="57" />
+          <folding>
+            <element signature="e#0#20#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/core/src/elements/mui-confirm-dialog/index.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="426">
+          <caret line="87" column="15" selection-start-line="87" selection-start-column="15" selection-end-line="87" selection-end-column="15" />
         </state>
       </provider>
     </entry>

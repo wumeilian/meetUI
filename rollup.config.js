@@ -3,13 +3,13 @@ const resolve = require('rollup-plugin-node-resolve');
 const babel = require('rollup-plugin-babel');
 const postcss = require('rollup-plugin-postcss');
 
-function buildModule(moduleName){
-    return {
+function buildModule(moduleName, isMini){
+    const config =  {
         input: `core/src/elements/${moduleName}/index.js`,
         output: {
             file: `dist/components/${moduleName}.js`,
             name: `${moduleName}`,
-            format: 'cjs'
+            format: isMini ? 'umd' : 'cjs'
         },
         plugins: [
             postcss({
@@ -23,37 +23,48 @@ function buildModule(moduleName){
                 }
             }),
             babel({
-                exclude: 'node_modules/**' // 只编译我们的源代码
             })
         ]
     }
+
+    // if(isMini){
+    //     config.plugins.push(execute(`node_modules/.bin/uglifyjs ${config.input} -c -m --comments '/${config.output.name} v/' --output ${config.output}`))
+    // }
+
+    return config;
 }
 
-const commonRollupConfig =  {
-    input: `core/src/index.esm.js`,
-    output: {
-        file: `dist/mui.js`,
-        name: `mui`,
-        format: 'cjs'
-    },
-    plugins: [
-        postcss({
-            extensions: [ '.css' ]
-        }),
-        json(),
-        resolve({
-            // 将自定义选项传递给解析插件
-            customResolveOptions: {
-                moduleDirectory: 'node_modules'
-            }
-        }),
-        babel({
-            exclude: 'node_modules/**' // 只编译我们的源代码
-        })
-    ]
+const buildCommonRollup = function (isMini) {
+    const config = {
+        input: `core/src/index.esm.js`,
+        output: {
+            file: `dist/mui.js`,
+            name: `mui`,
+            format: isMini ? 'umd' : 'cjs'
+        },
+        plugins: [
+            postcss({
+                extensions: [ '.css' ]
+            }),
+            json(),
+            resolve({
+                // 将自定义选项传递给解析插件
+                customResolveOptions: {
+                    moduleDirectory: 'node_modules'
+                }
+            }),
+            babel({
+            })
+        ]
+    }
+    // if(isMini){
+    //     config.plugins.push(execute(`node_modules/.bin/uglifyjs ${config.input} -c -m --comments '/${config.output.name} v/' --output ${config.output}`))
+    // }
+
+    return config;
 }
 
 module.exports = {
     buildModule,
-    commonRollupConfig
+    buildCommonRollup
 };

@@ -13,7 +13,7 @@ var btn = document.getElementById('btn');
 
 btn.addEventListener('click', function () {
     myPopup.show();
-})
+});
 
 var btn3 = document.getElementById('btn3');
 btn3.addEventListener('click', function () {
@@ -32,5 +32,5 @@ var myPopup2 = document.getElementById('my-popup2');
 var btn2 = document.getElementById('btn2');
 btn2.addEventListener('click', function () {
     myPopup2.show();
-})
+});
 

@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const components = process.argv.slice(2);
 
 const entrys = {};
@@ -16,6 +17,7 @@ components.forEach(item => {
     )
 });
 
+// plugins.push(new BundleAnalyzerPlugin())
 
 const options = {
     entry: entrys,

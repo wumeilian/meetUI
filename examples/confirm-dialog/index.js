@@ -55,3 +55,4 @@ dialog2.addEventListener('prehide', function (e) {
 dialog2.addEventListener('posthide', function (e) {
     console.log('posthide', e);
 });
+

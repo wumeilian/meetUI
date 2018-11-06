@@ -26,7 +26,7 @@ const bundle = (config, isMinify) => rollup(config)
         } else {
             return write(config.output.file, code)
         }
-    })
+    });
 
 
 gulp.task('clear', (cb) => {
@@ -36,8 +36,6 @@ gulp.task('clear', (cb) => {
 });
 
 gulp.task('build', ['clear'], () => {
-
-    console.log(buildCommonRollup());
 
     //（2）编译common.css
     gulp.src('./core/css/common.css')
@@ -89,7 +87,7 @@ function write (dest, code) {
         }
 
         fs.writeFileSync(filePath, code, err => {
-            if (err) return reject(err)
+            if (err) return reject(err);
             report()
         })
     })

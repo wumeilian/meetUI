@@ -2,6 +2,7 @@ import './index.css'
 import '../../core/css/common.css'
 import mui from  '../../core/src/index.esm'
 import '@ele/mui-dialog/index'
+import $ from 'jQuery';
 import eruda from 'eruda'
 
 eruda.init();
@@ -29,3 +30,5 @@ var btn2 = document.getElementById('btn2');
 btn2.addEventListener('click', function () {
     dialog2.show();
 });
+
+$('body').append('<mui-dialog>12112122</mui-dialog>');

@@ -128,7 +128,7 @@ export default class PopupElement extends BaseDialogElement{
                 this.close()
             }
             this._setVisible(false);
-        })
+        });
 
         // 设置的可滚动区域
         const selector = scAttr['conf-scrollSelector'];
@@ -140,7 +140,6 @@ export default class PopupElement extends BaseDialogElement{
     attributeChangedCallback(name, oldValue, newValue){
         console.log(name, oldValue, newValue);
         this.querySelector('.header__label').textContent = newValue;
-
     }
 }
 

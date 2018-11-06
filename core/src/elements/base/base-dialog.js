@@ -79,7 +79,7 @@ export default class BaseDialogElement extends BaseElement{
     connectedCallback(){
         util.colorLog('connectedCallback，life-cycle 首次插入到DOM');
 
-        // 移除所有attr
+        // 移除所有attr,会触发attributeChangedCallback，暂时去掉
         //util.clearConfAttr.call(this);
 
         console.log(this._mask);

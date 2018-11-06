@@ -736,8 +736,8 @@ var BaseDialogElement = function (_BaseElement) {
         value: function connectedCallback() {
             _common_libs_util__WEBPACK_IMPORTED_MODULE_1__["default"].colorLog('connectedCallback，life-cycle 首次插入到DOM');
 
-            // 移除所有attr
-            _common_libs_util__WEBPACK_IMPORTED_MODULE_1__["default"].clearConfAttr.call(this);
+            // 移除所有attr,会触发attributeChangedCallback，暂时去掉
+            //util.clearConfAttr.call(this);
 
             console.log(this._mask);
 
@@ -1112,6 +1112,7 @@ __webpack_require__.r(__webpack_exports__);
 
 eruda__WEBPACK_IMPORTED_MODULE_4___default.a.init();
 
+// 方式一
 // 创建dialog
 _core_src_index_esm__WEBPACK_IMPORTED_MODULE_2__["default"].createElement('dialog.html', { scrollSelector: '.dialog__body' });
 
@@ -1127,6 +1128,7 @@ closeEl.addEventListener('click', function () {
     dialog.hide();
 });
 
+//方式二
 var dialog2 = document.getElementById('my-dialog2');
 var btn2 = document.getElementById('btn2');
 

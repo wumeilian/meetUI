@@ -673,6 +673,11 @@ var BaseDialogElement = function (_BaseElement) {
             _common_libs_util__WEBPACK_IMPORTED_MODULE_1__["default"].triggerElementEvent(this, 'pre' + action, {});
 
             if (action === 'show') {
+                if (!this._animateData) {
+                    _common_libs_util__WEBPACK_IMPORTED_MODULE_1__["default"].triggerElementEvent(this, 'post' + action, {});
+                    this._toggleStyle(shouldShow);
+                    return;
+                }
                 _common_libs_animator__WEBPACK_IMPORTED_MODULE_2__["default"].animate(this._animateData[action], function () {
                     // postshow事件
                     _common_libs_util__WEBPACK_IMPORTED_MODULE_1__["default"].triggerElementEvent(_this2, 'post' + action, {});
@@ -680,6 +685,11 @@ var BaseDialogElement = function (_BaseElement) {
 
                 this._toggleStyle(shouldShow);
             } else {
+                if (!this._animateData) {
+                    _common_libs_util__WEBPACK_IMPORTED_MODULE_1__["default"].triggerElementEvent(this, 'post' + action, {});
+                    this._toggleStyle(shouldShow);
+                    return;
+                }
                 _common_libs_animator__WEBPACK_IMPORTED_MODULE_2__["default"].animate(this._animateData[action], function () {
                     _this2._toggleStyle(shouldShow);
                     // posthide事件
@@ -727,7 +737,7 @@ var BaseDialogElement = function (_BaseElement) {
             _common_libs_util__WEBPACK_IMPORTED_MODULE_1__["default"].colorLog('connectedCallback，life-cycle 首次插入到DOM');
 
             // 移除所有attr
-            _common_libs_util__WEBPACK_IMPORTED_MODULE_1__["default"].clearConfAttr.call(this);
+            //util.clearConfAttr.call(this);
 
             console.log(this._mask);
 
@@ -933,7 +943,7 @@ var PopupElement = function (_BaseDialogElement) {
                 content.appendChild(this.firstChild);
             }
 
-            // 设置的可滚动区域
+            // 获取属性
             var scAttr = _common_libs_util__WEBPACK_IMPORTED_MODULE_2__["default"].getConfAttr.call(this);
             var text = Object(_common_libs_commonUtils__WEBPACK_IMPORTED_MODULE_3__["merge"])(textObj, scAttr);
 
@@ -962,6 +972,12 @@ var PopupElement = function (_BaseDialogElement) {
             _common_libs_util__WEBPACK_IMPORTED_MODULE_2__["default"].elementOutSidePreventScroll(this, scrollSelector);
         }
     }, {
+        key: 'attributeChangedCallback',
+        value: function attributeChangedCallback(name, oldValue, newValue) {
+            console.log(name, oldValue, newValue);
+            this.querySelector('.header__label').textContent = newValue;
+        }
+    }, {
         key: '_mask',
         get: function get() {
             return _common_libs_util__WEBPACK_IMPORTED_MODULE_2__["default"].findChild(this, '.popup__mask');
@@ -980,6 +996,11 @@ var PopupElement = function (_BaseDialogElement) {
         key: '_closeEl',
         get: function get() {
             return this.querySelector('.header__close');
+        }
+    }], [{
+        key: 'observedAttributes',
+        get: function get() {
+            return ['conf-header'];
         }
     }]);
 
@@ -1152,6 +1173,7 @@ __webpack_require__.r(__webpack_exports__);
 
 eruda__WEBPACK_IMPORTED_MODULE_4___default.a.init();
 
+// 方式一
 var myPopup = document.getElementById('my-popup');
 var btn = document.getElementById('btn');
 
@@ -1159,6 +1181,12 @@ btn.addEventListener('click', function () {
     myPopup.show();
 });
 
+var btn3 = document.getElementById('btn3');
+btn3.addEventListener('click', function () {
+    myPopup.setAttribute('conf-header', document.getElementById('input').value);
+});
+
+// 方式二
 _core_src_index_esm__WEBPACK_IMPORTED_MODULE_2__["default"].createElement('popup.html', {
     conf: {
         header: '方式二标题',

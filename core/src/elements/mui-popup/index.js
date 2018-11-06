@@ -43,6 +43,10 @@ export default class PopupElement extends BaseDialogElement{
         }
     }
 
+    static get observedAttributes(){
+        return ['conf-header']
+    }
+
     get _mask() {
         return util.findChild(this, '.popup__mask');
     }
@@ -130,6 +134,12 @@ export default class PopupElement extends BaseDialogElement{
         const selector = scAttr['conf-scrollSelector'];
         const scrollSelector = selector? selector.value : scheme.scrollContainer;
         util.elementOutSidePreventScroll(this, scrollSelector)
+
+    }
+
+    attributeChangedCallback(name, oldValue, newValue){
+        console.log(name, oldValue, newValue);
+        this.querySelector('.header__label').textContent = newValue;
 
     }
 }

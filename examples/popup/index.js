@@ -7,7 +7,7 @@ import eruda from 'eruda'
 eruda.init();
 
 
-
+// 方式一
 var myPopup = document.getElementById('my-popup');
 var btn = document.getElementById('btn');
 
@@ -15,6 +15,13 @@ btn.addEventListener('click', function () {
     myPopup.show();
 })
 
+var btn3 = document.getElementById('btn3');
+btn3.addEventListener('click', function () {
+    myPopup.setAttribute('conf-header', document.getElementById('input').value)
+});
+
+
+// 方式二
 mui.createElement('popup.html', {
     conf: {
         header: '方式二标题',
@@ -26,3 +33,4 @@ var btn2 = document.getElementById('btn2');
 btn2.addEventListener('click', function () {
     myPopup2.show();
 })
+

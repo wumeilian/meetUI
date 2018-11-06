@@ -1,4 +1,4 @@
-import FastClick from 'fastclick';
+import FastClick from './common/faskclick';
 
 
 export default function setup(mui) {

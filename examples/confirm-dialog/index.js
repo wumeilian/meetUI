@@ -9,11 +9,9 @@ eruda.init();
 // 创建dialog
 // 方式一
 mui.createElement('confirm-dialog.html', {
-    conf: {
-        message: '这里是显示的message信息',
-        cancel: '取消',
-        confirm: '确定'
-    }
+    message: '这里是显示的message信息',
+    cancel: '取消',
+    confirm: '确定'
 });
 
 var dialog = document.getElementById('my-dialog'),

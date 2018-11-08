@@ -44,7 +44,7 @@ export default class PopupElement extends BaseDialogElement{
     }
 
     static get observedAttributes(){
-        return ['conf-header']
+        return ['header']
     }
 
     get _mask() {
@@ -96,8 +96,8 @@ export default class PopupElement extends BaseDialogElement{
         }
 
         // 获取属性
-        const scAttr = util.getConfAttr.call(this);
-        const text = merge(textObj, scAttr);
+        const attrs = util.getAttrs.call(this);
+        const text = merge(textObj, attrs);
 
         const template = `
             <div class="popup__mask"></div>
@@ -131,7 +131,7 @@ export default class PopupElement extends BaseDialogElement{
         });
 
         // 设置的可滚动区域
-        const selector = scAttr['conf-scrollSelector'];
+        const selector = attrs['scrollSelector'];
         const scrollSelector = selector? selector.value : scheme.scrollContainer;
         util.elementOutSidePreventScroll(this, scrollSelector)
 

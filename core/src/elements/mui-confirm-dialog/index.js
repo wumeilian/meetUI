@@ -84,8 +84,8 @@ export default class ConfirmDialogElement extends BaseDialogElement{
          */
 
         // 获取属性
-        const scAttr = util.getConfAttr.call(this);
-        const text = merge(textObj, scAttr);
+        const attrs = util.getAttrs.call(this);
+        const text = merge(textObj, attrs);
 
         const template = `
          <div class="dialog__mask"></div>

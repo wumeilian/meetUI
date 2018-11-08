@@ -152,15 +152,13 @@ util.clearConfAttr = function () {
 
 };
 
-util.getConfAttr = function () {
+util.getAttrs = function () {
     const conf = {};
     const attrs = this.attributes;
 
     for(let i=0; i < this.attributes.length; i++){
         let attrNAme = attrs[i].name;
-        if(attrNAme.indexOf('conf-') > -1){
-            conf[attrNAme.replace('conf-', '')] = attrs[i].value
-        }
+        conf[attrNAme] = attrs[i].value
     }
 
     return conf;

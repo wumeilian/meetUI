@@ -61,6 +61,6 @@ typings/
 .next
 
 .idea
-.idea/*
+.idea/**
 
 build/**

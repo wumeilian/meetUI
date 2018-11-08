@@ -17,16 +17,14 @@ btn.addEventListener('click', function () {
 
 var btn3 = document.getElementById('btn3');
 btn3.addEventListener('click', function () {
-    myPopup.setAttribute('conf-header', document.getElementById('input').value)
+    myPopup.setAttribute('header', document.getElementById('input').value)
 });
 
 
 // 方式二
 mui.createElement('popup.html', {
-    conf: {
-        header: '方式二标题',
-        textAlign: 'center'
-    }
+    header: '方式二标题',
+    textAlign: 'center'
 });
 var myPopup2 = document.getElementById('my-popup2');
 var btn2 = document.getElementById('btn2');
